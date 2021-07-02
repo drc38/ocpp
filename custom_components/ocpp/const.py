@@ -89,7 +89,6 @@ CONDITIONS = [
     "Session.Time",  # in min
     "Session.Energy",  # in kWh
     "Meter.Start",  # in kWh
-    "Available"
 ]
 
 # Additional general information to report
