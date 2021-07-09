@@ -87,7 +87,7 @@ async def test_failed_config_flow(hass, error_on_get_data):
 
     # Call again for step_id == "measurands" with default measurand
     error_config = MOCK_CONFIG_2
-    error_config["test_error_measurand"] = False
+    error_config["test_error_measurand"] = True
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"], user_input=error_config
     )
