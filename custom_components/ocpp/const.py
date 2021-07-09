@@ -1,7 +1,7 @@
 """Define constants for OCPP integration."""
 import homeassistant.const as ha
 
-from ocpp.v16.enums import UnitOfMeasure
+from ocpp.v16.enums import Measurand, UnitOfMeasure
 
 DOMAIN = "ocpp"
 CONF_METER_INTERVAL = "meter_interval"
@@ -49,35 +49,35 @@ SERVICE_UNLOCK = "unlock"
 
 # Ocpp supported measurands
 MEASURANDS = [
-    "Current.Export",
-    "Current.Import",
-    "Current.Offered",
-    "Energy.Active.Export.Register",
-    "Energy.Active.Import.Register",
-    "Energy.Reactive.Export.Register",
-    "Energy.Reactive.Import.Register",
-    "Energy.Active.Export.Interval",
-    "Energy.Active.Import.Interval",
-    "Energy.Reactive.Export.Interval",
-    "Energy.Reactive.Import.Interval",
-    "Frequency",
-    "Power.Active.Export",
-    "Power.Active.Import",
-    "Power.Factor",
-    "Power.Offered",
-    "Power.Reactive.Export",
-    "Power.Reactive.Import",
-    "RPM",
-    "SoC",
-    "Temperature",
-    "Voltage",
+    Measurand.current_export.value,
+    Measurand.current_import.value,
+    Measurand.current_offered.value,
+    Measurand.energy_active_export_register.value,
+    Measurand.energy_active_import_register.value,
+    Measurand.energy_reactive_export_register.value,
+    Measurand.energy_reactive_import_register.value,
+    Measurand.energy_active_export_interval.value,
+    Measurand.energy_active_import_interval.value,
+    Measurand.energy_reactive_export_interval.value,
+    Measurand.energy_reactive_import_interval.value,
+    Measurand.frequency.value,
+    Measurand.power_active_export.value,
+    Measurand.power_active_import.value,
+    Measurand.power_factor.value,
+    Measurand.power_offered.value,
+    Measurand.power_reactive_export.value,
+    Measurand.power_reactive_import.value,
+    Measurand.rpm.value,
+    Measurand.soc.value,
+    Measurand.temperature.value,
+    Measurand.voltage.value,
 ]
-DEFAULT_MEASURAND = "Energy.Active.Import.Register"
+DEFAULT_MEASURAND = Measurand.energy_active_import_register.value
 DEFAULT_MONITORED_VARIABLES = ",".join(MEASURANDS)
-DEFAULT_ENERGY_UNIT = UnitOfMeasure.wh
-DEFAULT_POWER_UNIT = UnitOfMeasure.w
-HA_ENERGY_UNIT = UnitOfMeasure.kwh
-HA_POWER_UNIT = UnitOfMeasure.kw
+DEFAULT_ENERGY_UNIT = UnitOfMeasure.wh.value
+DEFAULT_POWER_UNIT = UnitOfMeasure.w.value
+HA_ENERGY_UNIT = UnitOfMeasure.kwh.value
+HA_POWER_UNIT = UnitOfMeasure.kw.value
 
 # Additional conditions/states to monitor
 CONDITIONS = [
