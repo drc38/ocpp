@@ -1,11 +1,12 @@
 """Implement a test by a simulating a chargepoint."""
 import asyncio
+from datetime import datetime, timezone
 import logging
 
 import websockets
 
 from ocpp.v16 import ChargePoint as cp, call
-from ocpp.v16.enums import RegistrationStatus
+from ocpp.v16.enums import AuthorizationStatus, RegistrationStatus
 
 logging.basicConfig(level=logging.INFO)
 
@@ -18,11 +19,31 @@ class ChargePoint(cp):
         request = call.BootNotificationPayload(
             charge_point_model="Optimus", charge_point_vendor="The Mobility House"
         )
-
         response = await self.call(request)
+        assert response.status == RegistrationStatus.accepted
 
-        if response.status == RegistrationStatus.accepted:
-            print("Connected to central system.")
+    async def send_start_transaction(self):
+        """Send a start transaction notification."""
+        request = call.StartTransactionPayload(
+            connector_id=1,
+            id_tag="test_cp",
+            meter_start=12345,
+            timestamp=datetime.now(tz=timezone.utc).isoformat,
+        )
+        response = await self.call(request)
+        assert response.status == AuthorizationStatus.accepted
+
+    async def send_stop_transaction(self):
+        """Send a stop transaction notification."""
+        request = call.StopTransactionPayload(
+            meter_stop=54321,
+            timestamp=datetime.now(tz=timezone.utc).isoformat,
+            transaction_id=123,
+            reason="EVDisconnected",
+            id_tag="test_cp",
+        )
+        response = await self.call(request)
+        assert response.status == AuthorizationStatus.accepted
 
 
 async def main():
@@ -33,7 +54,12 @@ async def main():
 
         cp = ChargePoint("CP_1", ws)
 
-        await asyncio.gather(cp.start(), cp.send_boot_notification())
+        await asyncio.gather(
+            cp.start(),
+            cp.send_boot_notification(),
+            cp.send_start_transaction(),
+            cp.send_stop_transaction(),
+        )
 
 
 if __name__ == "__main__":
