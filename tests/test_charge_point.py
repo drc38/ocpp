@@ -45,6 +45,7 @@ class ChargePoint(cp):
 
     def __init__(self, id, connection, response_timeout=30):
         """Init extra variables for testing."""
+        super().__init__(id, connection)
         self._transactionId = 0
 
     @on(Action.GetConfiguration)
@@ -95,32 +96,3 @@ class ChargePoint(cp):
         )
         resp = await self.call(request)
         assert resp.id_tag_info["status"] == AuthorizationStatus.accepted.value
-
-
-async def main():
-    """Start at main entry point."""
-    async with websockets.connect(
-        "ws://localhost:9000/CP_1", subprotocols=["ocpp1.6"]
-    ) as ws:
-
-        cp = ChargePoint("CP_1", ws)
-
-        await asyncio.gather(
-            cp.start(),
-            cp.send_boot_notification(),
-            cp.send_start_transaction(),
-            cp.send_stop_transaction(),
-        )
-
-
-if __name__ == "__main__":
-    try:
-        # asyncio.run() is used when running this example with Python 3.7 and
-        # higher.
-        asyncio.run(main())
-    except AttributeError:
-        # For Python 3.6 a bit more code is required to run the main() task on
-        # an event loop.
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(main())
-        loop.close()
