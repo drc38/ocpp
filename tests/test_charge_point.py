@@ -35,7 +35,7 @@ async def test_cms_responses(hass):
     ) as ws:
 
         cp = ChargePoint("CP_1", ws)
-        time_out = datetime.now(tz=timezone.utc) + timedelta(seconds=30)
+        time_out = datetime.now(tz=timezone.utc) + timedelta(seconds=8)
         loop = True
         while loop:
             cp.start()
