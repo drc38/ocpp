@@ -1,5 +1,5 @@
 """Implement a test by a simulating a chargepoint."""
-import asyncio
+# import asyncio
 from datetime import datetime, timedelta, timezone
 
 from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -38,7 +38,8 @@ async def test_cms_responses(hass):
         time_out = datetime.now(tz=timezone.utc) + timedelta(seconds=30)
         loop = True
         while loop:
-            await asyncio.gather(cp.start(), cp.send_boot_notification())
+            cp.start()
+            await cp.send_boot_notification()
             await cp.send_start_transaction()
             await cp.send_stop_transaction()
             if datetime.now(tz=timezone.utc) >= time_out:
