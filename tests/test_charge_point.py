@@ -1,6 +1,6 @@
 """Implement a test by a simulating a chargepoint."""
 import asyncio
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 import websockets
@@ -14,6 +14,7 @@ from ocpp.v16.enums import (
     Action,
     AuthorizationStatus,
     AvailabilityStatus,
+    ConfigurationStatus,
     RegistrationStatus,
 )
 
@@ -34,10 +35,14 @@ async def test_cms_responses(hass):
     ) as ws:
 
         cp = ChargePoint("CP_1", ws)
-
-        await asyncio.gather(cp.start(), cp.send_boot_notification())
-        await cp.send_start_transaction()
-        await cp.send_stop_transaction()
+        time_out = datetime.now(tz=timezone.utc) + timedelta(seconds=30)
+        loop = True
+        while loop:
+            await asyncio.gather(cp.start(), cp.send_boot_notification())
+            await cp.send_start_transaction()
+            await cp.send_stop_transaction()
+            if datetime.now(tz=timezone.utc) >= time_out:
+                loop = False
 
 
 class ChargePoint(cp):
@@ -59,6 +64,23 @@ class ChargePoint(cp):
             return call_result.GetConfigurationPayload(configuration_key="300")
         if key == ConfigurationKey.number_of_connectors.value:
             return call_result.GetConfigurationPayload(configuration_key="1")
+        if key == ConfigurationKey.web_socket_ping_interval.value:
+            return call_result.GetConfigurationPayload(configuration_key="60")
+        if key == ConfigurationKey.meter_values_sampled_data.value:
+            return call_result.GetConfigurationPayload(
+                configuration_key="Energy.Reactive.Import.Register"
+            )
+        if key == ConfigurationKey.meter_value_sample_interval.value:
+            return call_result.GetConfigurationPayload(configuration_key="60")
+        if key == ConfigurationKey.charging_schedule_allowed_charging_rate_unit.value:
+            return call_result.GetConfigurationPayload(configuration_key="current")
+        if key == ConfigurationKey.authorize_remote_tx_requests.value:
+            return call_result.GetConfigurationPayload(configuration_key="false")
+
+    @on(Action.ChangeConfiguration)
+    def on_change_configuration(self, **kwargs):
+        """Handle a get configuration requests."""
+        return call_result.GetConfigurationPayload(ConfigurationStatus.accepted)
 
     @on(Action.ChangeAvailability)
     def on_change_availability(self, **kwargs):
