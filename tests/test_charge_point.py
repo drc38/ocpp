@@ -7,8 +7,15 @@ import websockets
 
 from custom_components.ocpp import async_setup_entry
 from custom_components.ocpp.const import DOMAIN
-from ocpp.v16 import ChargePoint as cp, call
-from ocpp.v16.enums import AuthorizationStatus, RegistrationStatus
+from custom_components.ocpp.enums import ConfigurationKey
+from ocpp.routing import on
+from ocpp.v16 import ChargePoint as cp, call, call_result
+from ocpp.v16.enums import (
+    Action,
+    AuthorizationStatus,
+    AvailabilityStatus,
+    RegistrationStatus,
+)
 
 from .const import MOCK_CONFIG_DATA
 
@@ -39,6 +46,23 @@ class ChargePoint(cp):
     def __init__(self, id, connection, response_timeout=30):
         """Init extra variables for testing."""
         self._transactionId = 0
+
+    @on(Action.GetConfiguration)
+    def on_get_configuration(self, key, **kwargs):
+        """Handle a get configuration requests."""
+        if key == ConfigurationKey.supported_feature_profiles.value:
+            return call_result.GetConfigurationPayload(
+                configuration_key="Core,FirmwareManagement,SmartCharging"
+            )
+        if key == ConfigurationKey.heartbeat_interval.value:
+            return call_result.GetConfigurationPayload(configuration_key="300")
+        if key == ConfigurationKey.number_of_connectors.value:
+            return call_result.GetConfigurationPayload(configuration_key="1")
+
+    @on(Action.ChangeAvailability)
+    def on_change_availability(self, **kwargs):
+        """Handle change availability requests."""
+        return call_result.ChangeAvailabilityPayload(AvailabilityStatus.accepted)
 
     async def send_boot_notification(self):
         """Send a boot notification."""
