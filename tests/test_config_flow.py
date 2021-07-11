@@ -82,7 +82,18 @@ async def test_failed_config_flow(hass, error_on_get_data):
     )
 
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
-    assert result["errors"] == {"base": "auth"}
+    assert result["errors"] == {}
+    assert result["step_id"] == "measurands"
+
+    # Call again for step_id == "measurands" with default measurand
+    error_config = MOCK_CONFIG_2
+    error_config["test_error_measurand"] = True
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], user_input=error_config
+    )
+
+    assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
+    assert result["errors"] == {"base": "measurand"}
 
 
 # # Our config flow also has an options flow, so we must test it as well.
