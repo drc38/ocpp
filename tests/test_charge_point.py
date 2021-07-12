@@ -38,11 +38,13 @@ async def test_cms_responses(hass):
         # time_out = datetime.now(tz=timezone.utc) + timedelta(seconds=8)
         # loop = True
         # while loop:
-        await cp.start()
-        await cp.send_boot_notification()
-        await cp.send_start_transaction()
-        await cp.send_stop_transaction()
-        asyncio.sleep(8)
+        asyncio.gather(
+            cp.start(),
+            cp.send_boot_notification(),
+            cp.send_start_transaction(),
+            cp.send_stop_transaction(),
+        )
+        # asyncio.sleep(8)
         #    if datetime.now(tz=timezone.utc) >= time_out:
         #        loop = False
 
