@@ -1,6 +1,6 @@
 """Implement a test by a simulating a chargepoint."""
-# import asyncio
-from datetime import datetime, timedelta, timezone
+import asyncio
+from datetime import datetime, timezone  # timedelta,
 
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 import websockets
@@ -35,15 +35,16 @@ async def test_cms_responses(hass):
     ) as ws:
 
         cp = ChargePoint("CP_1", ws)
-        time_out = datetime.now(tz=timezone.utc) + timedelta(seconds=8)
-        loop = True
-        while loop:
-            cp.start()
-            await cp.send_boot_notification()
-            await cp.send_start_transaction()
-            await cp.send_stop_transaction()
-            if datetime.now(tz=timezone.utc) >= time_out:
-                loop = False
+        # time_out = datetime.now(tz=timezone.utc) + timedelta(seconds=8)
+        # loop = True
+        # while loop:
+        await cp.start()
+        await cp.send_boot_notification()
+        await cp.send_start_transaction()
+        await cp.send_stop_transaction()
+        asyncio.sleep(8)
+        #    if datetime.now(tz=timezone.utc) >= time_out:
+        #        loop = False
 
 
 class ChargePoint(cp):
