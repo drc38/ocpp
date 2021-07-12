@@ -42,6 +42,7 @@ async def test_cms_responses(hass):
             cp.start(),
             cp.send_boot_notification(),
             cp.send_start_transaction(),
+            cp.send_meter_data(),
             cp.send_stop_transaction(),
         )
         # asyncio.sleep(8)
@@ -110,6 +111,158 @@ class ChargePoint(cp):
         resp = await self.call(request)
         self._transactionId = resp.transaction_id
         assert resp.id_tag_info["status"] == AuthorizationStatus.accepted.value
+
+    async def send_meter_data(self):
+        """Send meter data notification."""
+        request = call.MeterValuesPayload(
+            connector_id=1,
+            transaction_id=self._transactionId,
+            meter_value=[
+                {
+                    "timestamp": "2021-06-21T16:15:09Z",
+                    "sampledValue": [
+                        {
+                            "value": "1305570.000",
+                            "context": "Sample.Periodic",
+                            "measurand": "Energy.Active.Import.Register",
+                            "location": "Outlet",
+                            "unit": "Wh",
+                        },
+                        {
+                            "value": "0.000",
+                            "context": "Sample.Periodic",
+                            "measurand": "Current.Import",
+                            "location": "Outlet",
+                            "unit": "A",
+                            "phase": "L1",
+                        },
+                        {
+                            "value": "0.000",
+                            "context": "Sample.Periodic",
+                            "measurand": "Current.Import",
+                            "location": "Outlet",
+                            "unit": "A",
+                            "phase": "L2",
+                        },
+                        {
+                            "value": "0.000",
+                            "context": "Sample.Periodic",
+                            "measurand": "Current.Import",
+                            "location": "Outlet",
+                            "unit": "A",
+                            "phase": "L3",
+                        },
+                        {
+                            "value": "16.000",
+                            "context": "Sample.Periodic",
+                            "measurand": "Current.Offered",
+                            "location": "Outlet",
+                            "unit": "A",
+                        },
+                        {
+                            "value": "50.010",
+                            "context": "Sample.Periodic",
+                            "measurand": "Frequency",
+                            "location": "Outlet",
+                        },
+                        {
+                            "value": "0.000",
+                            "context": "Sample.Periodic",
+                            "measurand": "Power.Active.Import",
+                            "location": "Outlet",
+                            "unit": "W",
+                        },
+                        {
+                            "value": "0.000",
+                            "context": "Sample.Periodic",
+                            "measurand": "Power.Active.Import",
+                            "location": "Outlet",
+                            "unit": "W",
+                            "phase": "L1",
+                        },
+                        {
+                            "value": "0.000",
+                            "context": "Sample.Periodic",
+                            "measurand": "Power.Active.Import",
+                            "location": "Outlet",
+                            "unit": "W",
+                            "phase": "L2",
+                        },
+                        {
+                            "value": "0.000",
+                            "context": "Sample.Periodic",
+                            "measurand": "Power.Active.Import",
+                            "location": "Outlet",
+                            "unit": "W",
+                            "phase": "L3",
+                        },
+                        {
+                            "value": "0.000",
+                            "context": "Sample.Periodic",
+                            "measurand": "Power.Factor",
+                            "location": "Outlet",
+                        },
+                        {
+                            "value": "38.500",
+                            "context": "Sample.Periodic",
+                            "measurand": "Temperature",
+                            "location": "Body",
+                            "unit": "Celsius",
+                        },
+                        {
+                            "value": "228.000",
+                            "context": "Sample.Periodic",
+                            "measurand": "Voltage",
+                            "location": "Outlet",
+                            "unit": "V",
+                            "phase": "L1-N",
+                        },
+                        {
+                            "value": "227.000",
+                            "context": "Sample.Periodic",
+                            "measurand": "Voltage",
+                            "location": "Outlet",
+                            "unit": "V",
+                            "phase": "L2-N",
+                        },
+                        {
+                            "value": "229.300",
+                            "context": "Sample.Periodic",
+                            "measurand": "Voltage",
+                            "location": "Outlet",
+                            "unit": "V",
+                            "phase": "L3-N",
+                        },
+                        {
+                            "value": "395.900",
+                            "context": "Sample.Periodic",
+                            "measurand": "Voltage",
+                            "location": "Outlet",
+                            "unit": "V",
+                            "phase": "L1-L2",
+                        },
+                        {
+                            "value": "396.300",
+                            "context": "Sample.Periodic",
+                            "measurand": "Voltage",
+                            "location": "Outlet",
+                            "unit": "V",
+                            "phase": "L2-L3",
+                        },
+                        {
+                            "value": "398.900",
+                            "context": "Sample.Periodic",
+                            "measurand": "Voltage",
+                            "location": "Outlet",
+                            "unit": "V",
+                            "phase": "L3-L1",
+                        },
+                    ],
+                }
+            ],
+        )
+        await self.call(request)
+        # check an error is not thrown
 
     async def send_stop_transaction(self):
         """Send a stop transaction notification."""
