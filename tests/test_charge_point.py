@@ -38,9 +38,9 @@ async def test_cms_responses(hass):
 
     cs = hass.data[DOMAIN][config_entry.entry_id]
 
-    async for ws in websockets.connect(
+    async with websockets.connect(
         "ws://localhost:9000/CP_1", subprotocols=["ocpp1.6"]
-    ):
+    ) as ws:
 
         cp = ChargePoint("CP_1_test", ws)
         asyncio.gather(
