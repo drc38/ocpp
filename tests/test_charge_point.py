@@ -42,7 +42,7 @@ async def test_cms_responses(hass):
         "ws://localhost:9000/CP_1", subprotocols=["ocpp1.6"]
     ) as ws:
 
-        cp = ChargePoint("CP_1_tester", ws)
+        cp = ChargePoint("CP_1", ws)
         asyncio.gather(
             cp.start(),
             cp.send_boot_notification(),
@@ -323,7 +323,7 @@ class ChargePoint(cpclass):
         """Send a stop transaction notification."""
         request = call.StopTransactionPayload(
             meter_stop=54321,
-            timestamp=datetime.now(tz=timezone.utc).isoformat,
+            timestamp=datetime.now(tz=timezone.utc).isoformat(),
             transaction_id=self._transactionId,
             reason="EVDisconnected",
             id_tag="test_cp",
