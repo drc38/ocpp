@@ -43,7 +43,7 @@ async def test_cms_responses(hass):
     ) as ws:
 
         cp = ChargePoint("CP_1_test", ws)
-        asyncio.gather(
+        await asyncio.gather(
             cp.start(),
             #cp.send_boot_notification(),
             cp.send_start_transaction(),
