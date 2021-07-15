@@ -43,20 +43,20 @@ async def test_cms_responses(hass):
     ) as ws:
 
         cp = ChargePoint("CP_1", ws)
-        asyncio.gather(
-            cp.start(),
-            cp.send_boot_notification(),
-            cp.send_heartbeat(),
-            cp.send_authorize(),
-            cp.send_firmware_status(),
-            cp.send_data_transfer(),
-            cp.send_start_transaction(),
-            cp.send_status_notification(),
-            cp.send_meter_data(),
-            cp.send_stop_transaction(),
-            cs.set_charger_state(cp_id="CP_1", service_name="reset"),
-            cs.set_charger_state(cp_id="CP_1", service_name="unlock"),
-        )
+        #asyncio.gather(
+            cp.start()
+            cp.send_boot_notification()
+            cp.send_heartbeat()
+            cp.send_authorize()
+            cp.send_firmware_status()
+            cp.send_data_transfer()
+            cp.send_start_transaction()
+            cp.send_status_notification()
+            cp.send_meter_data()
+            cp.send_stop_transaction()
+            cs.set_charger_state(cp_id="CP_1", service_name="reset")
+            cs.set_charger_state(cp_id="CP_1", service_name="unlock")
+        #)
         await hass.async_block_till_done()
 
 
