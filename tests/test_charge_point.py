@@ -116,19 +116,19 @@ class ChargePoint(cpclass):
         request = call.BootNotificationPayload(
             charge_point_model="Optimus", charge_point_vendor="The Mobility House"
         )
-        resp = await self.call_result(request)
+        resp = await call_result(request)
         assert resp.status == RegistrationStatus.accepted
 
     async def send_heartbeat(self):
         """Send a heartbeat."""
         request = call.HeartbeatPayload()
-        resp = await self.call_result(request)
+        resp = await call_result(request)
         assert len(resp.current_time) > 0
 
     async def send_authorize(self):
         """Send an authorize request."""
         request = call.AuthorizePayload(id_tag="test_cp")
-        resp = await self.call_result(request)
+        resp = await call_result(request)
         assert resp.id_tag_info["status"] == AuthorizationStatus.accepted
 
     async def send_firmware_status(self):
@@ -136,7 +136,7 @@ class ChargePoint(cpclass):
         request = call.FirmwareStatusNotificationPayload(
             status=FirmwareStatus.downloaded
         )
-        resp = await self.call(request)
+        resp = await call_result(request)
         assert resp.id_tag_info["status"] == AuthorizationStatus.accepted
 
     async def send_data_transfer(self):
@@ -146,7 +146,7 @@ class ChargePoint(cpclass):
             message_id="Test123",
             data="Test data transfer",
         )
-        resp = await self.call(request)
+        resp = await call_result(request)
         assert resp.status == DataTransferStatus.accepted
 
     async def send_start_transaction(self):
@@ -157,7 +157,7 @@ class ChargePoint(cpclass):
             meter_start=12345,
             timestamp=datetime.now(tz=timezone.utc).isoformat,
         )
-        resp = await self.call(request)
+        resp = await call_result(request)
         self._transactionId = resp.transaction_id
         assert resp.id_tag_info["status"] == AuthorizationStatus.accepted.value
 
@@ -172,7 +172,7 @@ class ChargePoint(cpclass):
             vendor_id="The Mobility House",
             vendor_error_code="Test error",
         )
-        await self.call(request)
+        await call_result(request)
         # check an error is not thrown?
 
     async def send_meter_data(self):
@@ -324,7 +324,7 @@ class ChargePoint(cpclass):
                 }
             ],
         )
-        await self.call(request)
+        await call_result(request)
         # check an error is not thrown?
 
     async def send_stop_transaction(self):
@@ -336,5 +336,5 @@ class ChargePoint(cpclass):
             reason="EVDisconnected",
             id_tag="test_cp",
         )
-        resp = await self.call(request)
+        resp = await call_result(request)
         assert resp.id_tag_info["status"] == AuthorizationStatus.accepted.value
