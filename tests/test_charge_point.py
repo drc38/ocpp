@@ -71,25 +71,25 @@ class ChargePoint(cpclass):
     def on_get_configuration(self, key, **kwargs):
         """Handle a get configuration requests."""
         if key == ConfigurationKey.supported_feature_profiles.value:
-            return call_result.GetConfigurationPayload(
+            return call.GetConfigurationPayload(
                 configuration_key=["Core", "FirmwareManagement", "SmartCharging"]
             )
         if key == ConfigurationKey.heartbeat_interval.value:
-            return call_result.GetConfigurationPayload(configuration_key="300")
+            return call.GetConfigurationPayload(configuration_key="300")
         if key == ConfigurationKey.number_of_connectors.value:
-            return call_result.GetConfigurationPayload(configuration_key="1")
+            return call.GetConfigurationPayload(configuration_key="1")
         if key == ConfigurationKey.web_socket_ping_interval.value:
-            return call_result.GetConfigurationPayload(configuration_key="60")
+            return call.GetConfigurationPayload(configuration_key="60")
         if key == ConfigurationKey.meter_values_sampled_data.value:
-            return call_result.GetConfigurationPayload(
+            return call.GetConfigurationPayload(
                 configuration_key="Energy.Reactive.Import.Register"
             )
         if key == ConfigurationKey.meter_value_sample_interval.value:
-            return call_result.GetConfigurationPayload(configuration_key="60")
+            return call.GetConfigurationPayload(configuration_key="60")
         if key == ConfigurationKey.charging_schedule_allowed_charging_rate_unit.value:
-            return call_result.GetConfigurationPayload(configuration_key="Current")
+            return call.GetConfigurationPayload(configuration_key="Current")
         if key == ConfigurationKey.authorize_remote_tx_requests.value:
-            return call_result.GetConfigurationPayload(configuration_key="false")
+            return call.GetConfigurationPayload(configuration_key="false")
 
     @on(Action.ChangeConfiguration)
     def on_change_configuration(self, **kwargs):
