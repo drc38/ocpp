@@ -38,11 +38,11 @@ async def test_cms_responses(hass):
 
     cs = hass.data[DOMAIN][config_entry.entry_id]
 
-    async with websockets.connect(
+    async for ws in websockets.connect(
         "ws://localhost:9000/CP_1", subprotocols=["ocpp1.6"]
-    ) as ws:
+    ):
 
-        cp = ChargePoint("CP_1", ws)
+        cp = ChargePoint("CP_1_test", ws)
         asyncio.gather(
             cp.start(),
             cp.send_boot_notification(),
