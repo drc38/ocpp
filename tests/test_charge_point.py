@@ -42,7 +42,7 @@ async def test_cms_responses(hass):
         "ws://localhost:9000/CP_1", subprotocols=["ocpp1.6"]
     ) as ws:
 
-        cp = ChargePoint("CP_1", ws)
+        cp = ChargePoint("CP_1_tester", ws)
         #asyncio.gather(
         task = asyncio.create_task(cp.start())
         await cp.send_boot_notification()
@@ -116,19 +116,19 @@ class ChargePoint(cpclass):
         request = call.BootNotificationPayload(
             charge_point_model="Optimus", charge_point_vendor="The Mobility House"
         )
-        resp = await self.call(request)
+        resp = await self.call_result(request)
         assert resp.status == RegistrationStatus.accepted
 
     async def send_heartbeat(self):
         """Send a heartbeat."""
         request = call.HeartbeatPayload()
-        resp = await self.call(request)
+        resp = await self.call_result(request)
         assert len(resp.current_time) > 0
 
     async def send_authorize(self):
         """Send an authorize request."""
         request = call.AuthorizePayload(id_tag="test_cp")
-        resp = await self.call(request)
+        resp = await self.call_result(request)
         assert resp.id_tag_info["status"] == AuthorizationStatus.accepted
 
     async def send_firmware_status(self):
