@@ -261,7 +261,6 @@ class ChargePoint(cp):
             _LOGGER.error("Ocpp key not supported: %s ", key)
 
         try:
-            await asyncio.sleep(2)
             await self.get_supported_features()
             if om.feature_profile_remote.value in self._features_supported:
                 await self.trigger_boot_notification()
