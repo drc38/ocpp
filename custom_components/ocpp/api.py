@@ -135,11 +135,11 @@ class CentralSystem:
                 _LOGGER.info(f"Charger {cp_id} connected to {self.host}:{self.port}.")
                 cp = ChargePoint(cp_id, websocket, self.hass, self.entry, self)
                 self.charge_points[self.cpid] = cp
-                await cp.start()
+                await self.charge_points[self.cpid].start()
             else:
                 _LOGGER.info(f"Charger {cp_id} reconnected to {self.host}:{self.port}.")
                 cp = self.charge_points[self.cpid]
-                await cp.reconnect(websocket)
+                await self.charge_points[self.cpid].reconnect(websocket)
         except Exception as e:
             _LOGGER.info(f"Exception occurred:\n{e}")
         finally:
