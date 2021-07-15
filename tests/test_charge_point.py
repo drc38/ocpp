@@ -57,6 +57,7 @@ async def test_cms_responses(hass):
             cs.set_charger_state(cp_id="CP_1", service_name="reset"),
             cs.set_charger_state(cp_id="CP_1", service_name="unlock"),
         )
+        await hass.async_block_till_done()
 
 
 class ChargePoint(cp):
