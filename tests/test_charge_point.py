@@ -39,7 +39,7 @@ async def test_cms_responses(hass):
     cs = hass.data[DOMAIN][config_entry.entry_id]
 
     async with websockets.connect(
-        "ws://localhost:9000/CP_1", subprotocols=["ocpp1.6"]
+        "ws://localhost:9000/CP_1", subprotocols=["ocpp1.6"], close_timeout = 10
     ) as ws:
         cp = ChargePoint("CP_1_test", ws)
         loop = True
