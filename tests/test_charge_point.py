@@ -63,30 +63,30 @@ class ChargePoint(cpclass):
     def on_get_configuration(self, key, **kwargs):
         """Handle a get configuration requests."""
         if key == ConfigurationKey.supported_feature_profiles.value:
-            return call.GetConfigurationPayload(
+            return call_result.GetConfigurationPayload(
                 configuration_key=["Core", "FirmwareManagement", "SmartCharging"]
             )
         if key == ConfigurationKey.heartbeat_interval.value:
-            return call.GetConfigurationPayload(configuration_key="300")
+            return call_result.GetConfigurationPayload(configuration_key="300")
         if key == ConfigurationKey.number_of_connectors.value:
-            return call.GetConfigurationPayload(configuration_key="1")
+            return call_result.GetConfigurationPayload(configuration_key="1")
         if key == ConfigurationKey.web_socket_ping_interval.value:
-            return call.GetConfigurationPayload(configuration_key="60")
+            return call_result.GetConfigurationPayload(configuration_key="60")
         if key == ConfigurationKey.meter_values_sampled_data.value:
-            return call.GetConfigurationPayload(
+            return call_result.GetConfigurationPayload(
                 configuration_key="Energy.Reactive.Import.Register"
             )
         if key == ConfigurationKey.meter_value_sample_interval.value:
-            return call.GetConfigurationPayload(configuration_key="60")
+            return call_result.GetConfigurationPayload(configuration_key="60")
         if key == ConfigurationKey.charging_schedule_allowed_charging_rate_unit.value:
-            return call.GetConfigurationPayload(configuration_key="Current")
+            return call_result.GetConfigurationPayload(configuration_key="Current")
         if key == ConfigurationKey.authorize_remote_tx_requests.value:
-            return call.GetConfigurationPayload(configuration_key="false")
+            return call_result.GetConfigurationPayload(configuration_key="false")
 
     @on(Action.ChangeConfiguration)
     def on_change_configuration(self, **kwargs):
         """Handle a get configuration request."""
-        return call_result.GetConfigurationPayload(ConfigurationStatus.accepted)
+        return call_result.ChangeConfigurationPayload(ConfigurationStatus.accepted)
 
     @on(Action.ChangeAvailability)
     def on_change_availability(self, **kwargs):
@@ -108,19 +108,19 @@ class ChargePoint(cpclass):
         request = call.BootNotificationPayload(
             charge_point_model="Optimus", charge_point_vendor="The Mobility House"
         )
-        resp = await call_result(request)
+        resp = await self.call(request)
         assert resp.status == RegistrationStatus.accepted
 
     async def send_heartbeat(self):
         """Send a heartbeat."""
         request = call.HeartbeatPayload()
-        resp = await call_result(request)
+        resp = await self.call(request)
         assert len(resp.current_time) > 0
 
     async def send_authorize(self):
         """Send an authorize request."""
         request = call.AuthorizePayload(id_tag="test_cp")
-        resp = await call_result(request)
+        resp = await self.call(request)
         assert resp.id_tag_info["status"] == AuthorizationStatus.accepted
 
     async def send_firmware_status(self):
@@ -128,7 +128,7 @@ class ChargePoint(cpclass):
         request = call.FirmwareStatusNotificationPayload(
             status=FirmwareStatus.downloaded
         )
-        resp = await call_result(request)
+        resp = await self.call(request)
         assert resp.id_tag_info["status"] == AuthorizationStatus.accepted
 
     async def send_data_transfer(self):
@@ -138,7 +138,7 @@ class ChargePoint(cpclass):
             message_id="Test123",
             data="Test data transfer",
         )
-        resp = await call_result(request)
+        resp = await self.call(request)
         assert resp.status == DataTransferStatus.accepted
 
     async def send_start_transaction(self):
@@ -149,7 +149,7 @@ class ChargePoint(cpclass):
             meter_start=12345,
             timestamp=datetime.now(tz=timezone.utc).isoformat,
         )
-        resp = await call_result(request)
+        resp = await self.call(request)
         self._transactionId = resp.transaction_id
         assert resp.id_tag_info["status"] == AuthorizationStatus.accepted.value
 
@@ -164,7 +164,7 @@ class ChargePoint(cpclass):
             vendor_id="The Mobility House",
             vendor_error_code="Test error",
         )
-        await call_result(request)
+        await self.call(request)
         # check an error is not thrown?
 
     async def send_meter_data(self):
@@ -316,7 +316,7 @@ class ChargePoint(cpclass):
                 }
             ],
         )
-        await call_result(request)
+        await self.call(request)
         # check an error is not thrown?
 
     async def send_stop_transaction(self):
@@ -328,5 +328,5 @@ class ChargePoint(cpclass):
             reason="EVDisconnected",
             id_tag="test_cp",
         )
-        resp = await call_result(request)
+        resp = await self.call(request)
         assert resp.id_tag_info["status"] == AuthorizationStatus.accepted.value
