@@ -147,7 +147,7 @@ class ChargePoint(cpclass):
             connector_id=1,
             id_tag="test_cp",
             meter_start=12345,
-            timestamp=datetime.now(tz=timezone.utc).isoformat,
+            timestamp=datetime.now(tz=timezone.utc).isoformat(),
         )
         resp = await self.call(request)
         self._transactionId = resp.transaction_id
@@ -159,7 +159,7 @@ class ChargePoint(cpclass):
             connector_id=1,
             error_code=ChargePointErrorCode.no_error,
             status=ChargePointStatus.charging,
-            timestamp=datetime.now(tz=timezone.utc).isoformat,
+            timestamp=datetime.now(tz=timezone.utc).isoformat(),
             info="Test info",
             vendor_id="The Mobility House",
             vendor_error_code="Test error",
