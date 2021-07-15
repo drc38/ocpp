@@ -9,7 +9,7 @@ from custom_components.ocpp import async_setup_entry
 from custom_components.ocpp.const import DOMAIN
 from custom_components.ocpp.enums import ConfigurationKey
 from ocpp.routing import on
-from ocpp.v16 import ChargePoint as cp, call, call_result
+from ocpp.v16 import ChargePoint as cpclass, call, call_result
 from ocpp.v16.enums import (
     Action,
     AuthorizationStatus,
@@ -59,7 +59,7 @@ async def test_cms_responses(hass):
         #)
         task.cancel()
 
-class ChargePoint(cp):
+class ChargePoint(cpclass):
     """Representation of real client Charge Point."""
 
     def __init__(self, id, connection, response_timeout=30):
