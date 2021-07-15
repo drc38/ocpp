@@ -43,21 +43,13 @@ async def test_cms_responses(hass):
     ) as ws:
 
         cp = ChargePoint("CP_1_tester", ws)
-        #asyncio.gather(
-        task = asyncio.create_task(cp.start())
-        await cp.send_boot_notification()
-        await cp.send_heartbeat()
-        await cp.send_authorize()
-        await cp.send_firmware_status()
-        await cp.send_data_transfer()
-        await cp.send_start_transaction()
-        await cp.send_status_notification()
-        await cp.send_meter_data()
-        await cp.send_stop_transaction()
-        await cs.set_charger_state(cp_id="CP_1", service_name="reset")
-        await cs.set_charger_state(cp_id="CP_1", service_name="unlock")
-        #)
-        task.cancel()
+        asyncio.gather(
+            cp.start(),
+            cp.send_boot_notification(),
+            cp.send_start_transaction(),
+            cp.send_meter_data(),
+            cp.send_stop_transaction(),
+        )
 
 class ChargePoint(cpclass):
     """Representation of real client Charge Point."""
