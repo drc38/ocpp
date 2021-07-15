@@ -13,6 +13,10 @@ class HAChargerServices(str, Enum):
     service_set_charge_rate = "set_charge_rate"
     service_reset = "reset"
     service_unlock = "unlock"
+    service_update_firmware = "update_firmware"
+    service_configure = "configure"
+    service_get_configuration = "get_configuration"
+    service_clear_profile = "clear_profile"
 
 
 class HAChargerStatuses(str, Enum):
