@@ -31,7 +31,7 @@ async def test_cms_responses(hass):
     """Test central system responses to a charger."""
     # Create a mock entry so we don't have to go through config flow
     config_entry = MockConfigEntry(
-        domain=DOMAIN, data=MOCK_CONFIG_DATA, entry_id="test"
+        domain=DOMAIN, data=MOCK_CONFIG_DATA, entry_id="test_cms"
     )
     assert await async_setup_entry(hass, config_entry)
     await hass.async_block_till_done()
@@ -45,6 +45,9 @@ async def test_cms_responses(hass):
         try:
             await asyncio.wait_for(asyncio.gather(cp.start(),
                 cp.send_boot_notification(),
+                cp.send_authorize(),
+                cp.send_heartbeat(),
+                cp.send_status_notification(),
                 cp.send_start_transaction(),
                 cp.send_meter_data(),
                 cp.send_stop_transaction(),), timeout = 7,
