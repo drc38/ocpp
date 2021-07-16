@@ -495,7 +495,7 @@ class ChargePoint(cp):
             _LOGGER.debug("Failed with response: %s", resp.status)
             return False
 
-    async def reset(self, typ: str = ResetType.hard):
+    async def reset(self, typ: str = ResetType.soft):
         """Soft reset charger unless hard reset requested."""
         req = call.ResetPayload(typ)
         resp = await self.call(req)
