@@ -48,6 +48,8 @@ async def test_cms_responses(hass):
                 cp.send_authorize(),
                 cp.send_heartbeat(),
                 cp.send_status_notification(),
+                cp.send_firmware_status(),
+                cp.send_data_transfer(),
                 cp.send_start_transaction(),
                 cp.send_meter_data(),
                 cp.send_stop_transaction(),), timeout = 7,
