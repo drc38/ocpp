@@ -47,8 +47,8 @@ async def test_cms_responses(hass):
                 cp.send_boot_notification(),
                 cp.send_start_transaction(),
                 cp.send_meter_data(),
-                cp.send_stop_transaction(),
-                    ), timeout = 7)
+                cp.send_stop_transaction(),), timeout = 7,
+                                  )
         except asyncio.TimeoutError:
          
 
