@@ -141,7 +141,6 @@ class ChargePoint(cpclass):
             status=FirmwareStatus.downloaded
         )
         resp = await self.call(request)
-        assert resp.id_tag_info["status"] == AuthorizationStatus.accepted
 
     async def send_data_transfer(self):
         """Send a data transfer."""
