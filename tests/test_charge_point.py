@@ -58,8 +58,6 @@ async def test_cms_responses(hass):
                 cp.send_start_transaction(),
                 cp.send_meter_data(),
                 cp.send_stop_transaction(),
-                cs.get_metric("test_cpid","Energy.Active.Import.Register"),
-                cs.get_unit("test_cpid","Energy.Active.Import.Register"),
                 cs.charge_points["test_cpid"].start_transaction(),
                 cs.charge_points["test_cpid"].reset(),
                 cs.charge_points["test_cpid"].set_charge_rate(),
@@ -69,6 +67,8 @@ async def test_cms_responses(hass):
                                   )
         except asyncio.TimeoutError:
             pass
+        assert int(cs.get_metric("test_cpid","Energy.Active.Import.Register")) == 1305570
+        assert cs.get_unit("test_cpid","Energy.Active.Import.Register") == "Wh"
     await async_unload_entry(hass, config_entry)
     await hass.async_block_till_done()
          
