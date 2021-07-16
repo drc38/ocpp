@@ -52,6 +52,7 @@ async def test_cms_responses(hass):
         except asyncio.TimeoutError:
             pass
     await async_unload_entry(hass, config_entry)
+    await hass.async_block_till_done()
          
 
 class ChargePoint(cpclass):
