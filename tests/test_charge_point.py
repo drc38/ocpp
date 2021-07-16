@@ -60,7 +60,7 @@ async def test_cms_responses(hass):
                 cs.charge_points["test_cpid"].start_transaction(),
                 cs.charge_points["test_cpid"].reset(),
                 cs.charge_points["test_cpid"].set_charge_rate(),
-                cs.charge_points["test_cpid"].update_firmware(),
+                cs.charge_points["test_cpid"].update_firmware("http://www.charger.com/file.bin"),
                 cs.charge_points["test_cpid"].unlock()), timeout = 7,
                                   )
         except asyncio.TimeoutError:
