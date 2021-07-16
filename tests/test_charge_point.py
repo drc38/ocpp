@@ -86,6 +86,7 @@ class ChargePoint(cpclass):
             return call_result.GetConfigurationPayload(configuration_key="Current")
         if key == ConfigurationKey.authorize_remote_tx_requests.value:
             return call_result.GetConfigurationPayload(configuration_key="false")
+        return call_result.GetConfigurationPayload(configuration_key="")
 
     @on(Action.ChangeConfiguration)
     def on_change_configuration(self, **kwargs):
