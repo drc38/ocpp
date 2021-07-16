@@ -5,7 +5,7 @@ from datetime import datetime, timezone  # timedelta,
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 import websockets
 
-from custom_components.ocpp import async_setup_entry
+from custom_components.ocpp import async_setup_entry, async_unload_entry
 from custom_components.ocpp.const import DOMAIN
 from custom_components.ocpp.enums import ConfigurationKey
 from ocpp.routing import on
