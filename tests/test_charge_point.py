@@ -84,6 +84,7 @@ async def test_cms_responses(hass):
     await hass.async_block_till_done()
 
 
+
 class ChargePoint(cpclass):
     """Representation of real client Charge Point."""
 
@@ -152,6 +153,7 @@ class ChargePoint(cpclass):
             configuration_key=[{"key": key[0], "readonly": False, "value": ""}]
         )
 
+
     @on(Action.ChangeConfiguration)
     def on_change_configuration(self, **kwargs):
         """Handle a get configuration request."""
@@ -188,6 +190,7 @@ class ChargePoint(cpclass):
         return call_result.ClearChargingProfilePayload(
             ClearChargingProfileStatus.accepted
         )
+
 
     @on(Action.TriggerMessage)
     def on_trigger_message(self, **kwargs):
@@ -227,6 +230,7 @@ class ChargePoint(cpclass):
         resp = await self.call(request)
         assert len(resp) > 0
 
+
     async def send_data_transfer(self):
         """Send a data transfer."""
         request = call.DataTransferPayload(
@@ -262,6 +266,7 @@ class ChargePoint(cpclass):
         )
         resp = await self.call(request)
         assert len(resp) > 0
+
         # check an error is not thrown?
 
     async def send_meter_data(self):
@@ -415,6 +420,7 @@ class ChargePoint(cpclass):
         )
         resp = await self.call(request)
         assert len(resp) > 0
+
         # check an error is not thrown?
 
     async def send_stop_transaction(self):
