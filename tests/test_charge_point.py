@@ -41,6 +41,7 @@ async def test_cms_responses(hass):
     async with websockets.connect(
         "ws://localhost:9000/CP_1", subprotocols=["ocpp1.6"], 
     ) as ws:
+        # use a different id for debugging
         cp = ChargePoint("CP_1_test", ws)
         try:
             await asyncio.wait_for(asyncio.gather(cp.start(),
@@ -53,7 +54,7 @@ async def test_cms_responses(hass):
                 cp.send_start_transaction(),
                 cp.send_meter_data(),
                 cp.send_stop_transaction(),
-                cs.start_transaction()), timeout = 7,
+                cs.charge_points["CP_1"].start_transaction()), timeout = 7,
                                   )
         except asyncio.TimeoutError:
             pass
