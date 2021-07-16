@@ -58,7 +58,6 @@ async def test_cms_responses(hass):
                 cp.send_stop_transaction(),
                 cs.charge_points["test_cpid"].unlock(),
                 cs.charge_points["test_cpid"].reset(),
-                cs.charge_points["test_cpid"].availability(),
                 cs.charge_points["test_cpid"].set_charge_rate(),
                 cs.charge_points["test_cpid"].start_transaction()), timeout = 7,
                                   )
