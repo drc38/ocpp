@@ -58,6 +58,8 @@ async def test_cms_responses(hass):
                     cp.send_status_notification(),
                     cp.send_firmware_status(),
                     cp.send_data_transfer(),
+                    cp.trigger_boot_notification(),
+                    cp.trigger_status_notification(),
                     cp.send_start_transaction(),
                     cp.send_meter_data(),
                     cp.send_stop_transaction(),
@@ -99,7 +101,7 @@ class ChargePoint(cpclass):
                     {
                         "key": key[0],
                         "readonly": False,
-                        "value": "Core,FirmwareManagement,SmartCharging",
+                        "value": "Core,FirmwareManagement,RemoteTrigger,SmartCharging",
                     }
                 ]
             )
@@ -222,7 +224,8 @@ class ChargePoint(cpclass):
         request = call.FirmwareStatusNotificationPayload(
             status=FirmwareStatus.downloaded
         )
-        await self.call(request)
+        resp = await self.call(request)
+        assert len(resp) > 0
 
     async def send_data_transfer(self):
         """Send a data transfer."""
@@ -257,7 +260,8 @@ class ChargePoint(cpclass):
             vendor_id="The Mobility House",
             vendor_error_code="Test error",
         )
-        await self.call(request)
+        resp = await self.call(request)
+        assert len(resp) > 0
         # check an error is not thrown?
 
     async def send_meter_data(self):
@@ -409,7 +413,8 @@ class ChargePoint(cpclass):
                 }
             ],
         )
-        await self.call(request)
+        resp = await self.call(request)
+        assert len(resp) > 0
         # check an error is not thrown?
 
     async def send_stop_transaction(self):
