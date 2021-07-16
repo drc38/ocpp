@@ -30,6 +30,7 @@ from ocpp.v16.enums import (
     ConfigurationStatus,
     DataTransferStatus,
     Measurand,
+    MessageTrigger,
     RegistrationStatus,
     RemoteStartStopStatus,
     ResetStatus,
@@ -328,7 +329,7 @@ class ChargePoint(cp):
     async def trigger_boot_notification(self):
         """Trigger a boot notification."""
         req = call.TriggerMessagePayload(
-            requested_message=Action.boot_notification.value
+            requested_message=MessageTrigger.boot_notification
         )
         resp = await self.call(req)
         if resp.status == TriggerMessageStatus.accepted:
@@ -340,7 +341,7 @@ class ChargePoint(cp):
     async def trigger_status_notification(self):
         """Trigger a status notification."""
         req = call.TriggerMessagePayload(
-            requested_message=Action.status_notification.value
+            requested_message=MessageTrigger.status_notification
         )
         resp = await self.call(req)
         if resp.status == TriggerMessageStatus.accepted:
