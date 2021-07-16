@@ -23,6 +23,7 @@ from ocpp.v16.enums import (
     RegistrationStatus,
     RemoteStartStopStatus,
     ResetStatus,
+    TriggerMessageStatus,
     UnlockStatus,
 )
 
@@ -80,7 +81,7 @@ class ChargePoint(cpclass):
         """Handle a get configuration requests."""
         if key[0] == ConfigurationKey.supported_feature_profiles.value:
             return call_result.GetConfigurationPayload(
-                configuration_key=[{"key":key[0], "readonly": False, "value": "Core,FirmwareManagement,SmartCharging"}]
+                configuration_key=[{"key":key[0], "readonly": False, "value": "Core,FirmwareManagement,RemoteTrigger,SmartCharging"}]
             )
         if key[0] == ConfigurationKey.heartbeat_interval.value:
             return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":"300"}])
@@ -131,6 +132,11 @@ class ChargePoint(cpclass):
     def on_set_charging_profile(self, **kwargs):
         """Handle set charging profile request."""
         return call_result.SetChargingProfilePayload(ChargingProfileStatus.accepted)
+    
+    @on(Action.TriggerMessage)
+    def on_trigger_message(self, **kwargs):
+        """Handle set charging profile request."""
+        return call_result.TriggerMessagePayload(TriggerMessageStatus.accepted)
 
     async def send_boot_notification(self):
         """Send a boot notification."""
