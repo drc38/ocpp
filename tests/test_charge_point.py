@@ -136,12 +136,12 @@ class ChargePoint(cpclass):
     
     @on(Action.TriggerMessage)
     def on_trigger_message(self, **kwargs):
-        """Handle set charging profile request."""
+        """Handle trigger message request."""
         return call_result.TriggerMessagePayload(TriggerMessageStatus.accepted)
     
     @on(Action.UpdateFirmware)
     def on_trigger_message(self, **kwargs):
-        """Handle set charging profile request."""
+        """Handle update firmware request."""
         return call_result.UpdateFirmwarePayload()
 
     async def send_boot_notification(self):
