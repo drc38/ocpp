@@ -82,7 +82,7 @@ class ChargePoint(cpclass):
         """Handle a get configuration requests."""
         if key[0] == ConfigurationKey.supported_feature_profiles.value:
             return call_result.GetConfigurationPayload(
-                configuration_key=[{"key":key[0], "readonly": False, "value": "Core,FirmwareManagement,RemoteTrigger,SmartCharging"}]
+                configuration_key=[{"key":key[0], "readonly": False, "value": "Core,FirmwareManagement,SmartCharging"}]
             )
         if key[0] == ConfigurationKey.heartbeat_interval.value:
             return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":"300"}])
