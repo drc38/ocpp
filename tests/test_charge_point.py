@@ -93,6 +93,8 @@ class ChargePoint(cpclass):
             return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":"Current"}])
         if key[0] == ConfigurationKey.authorize_remote_tx_requests.value:
             return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":"false"}])
+        if key[0] == ConfigurationKey.charge_profile_max_stack_level.value:
+            return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":"3"}])
         return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":""}])
 
     @on(Action.ChangeConfiguration)
