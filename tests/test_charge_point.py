@@ -20,6 +20,7 @@ from ocpp.v16.enums import (
     DataTransferStatus,
     FirmwareStatus,
     RegistrationStatus,
+    RemoteStartStopStatus,
     ResetStatus,
     UnlockStatus,
 )
@@ -54,6 +55,10 @@ async def test_cms_responses(hass):
                 cp.send_start_transaction(),
                 cp.send_meter_data(),
                 cp.send_stop_transaction(),
+                cs.charge_points["test_cpid"].unlock(),
+                cs.charge_points["test_cpid"].reset(),
+                cs.charge_points["test_cpid"].availability(),
+                cs.charge_points["test_cpid"].set_charge_rate(),
                 cs.charge_points["test_cpid"].start_transaction()), timeout = 7,
                                   )
         except asyncio.TimeoutError:
@@ -116,6 +121,11 @@ class ChargePoint(cpclass):
     def on_reset(self, **kwargs):
         """Handle change availability request."""
         return call_result.ResetPayload(ResetStatus.accepted)
+    
+    @on(Action.RemoteStartTransaction)
+    def on_remote_start_transaction(self, **kwargs):
+        """Handle remote start request."""
+        return call_result.RemoteStartTransaction(RemoteStartStopStatus.accepted)
 
     async def send_boot_notification(self):
         """Send a boot notification."""
