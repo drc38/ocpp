@@ -60,6 +60,7 @@ async def test_cms_responses(hass):
                 cs.charge_points["test_cpid"].start_transaction(),
                 cs.charge_points["test_cpid"].reset(),
                 cs.charge_points["test_cpid"].set_charge_rate(),
+                cs.charge_points["test_cpid"].clear_profile(),
                 cs.charge_points["test_cpid"].update_firmware("http://www.charger.com/file.bin"),
                 cs.charge_points["test_cpid"].unlock()), timeout = 7,
                                   )
@@ -133,6 +134,11 @@ class ChargePoint(cpclass):
     def on_set_charging_profile(self, **kwargs):
         """Handle set charging profile request."""
         return call_result.SetChargingProfilePayload(ChargingProfileStatus.accepted)
+    
+    @on(Action.ClearChargingProfile)
+    def on_clear_charging_profile(self, **kwargs):
+        """Handle clear charging profile request."""
+        return call_result.ClearChargingProfilePayload(ClearChargingProfileStatus.accepted)
     
     @on(Action.TriggerMessage)
     def on_trigger_message(self, **kwargs):
