@@ -57,10 +57,10 @@ async def test_cms_responses(hass):
                 cp.send_start_transaction(),
                 cp.send_meter_data(),
                 cp.send_stop_transaction(),
-                cs.charge_points["test_cpid"].unlock(),
-                cs.charge_points["test_cpid"].reset(),
-                cs.charge_points["test_cpid"].set_charge_rate(),
-                cs.charge_points["test_cpid"].start_transaction()), timeout = 7,
+                #cs.charge_points["test_cpid"].start_transaction(),
+                #cs.charge_points["test_cpid"].reset(),
+                #cs.charge_points["test_cpid"].set_charge_rate(),
+                cs.charge_points["test_cpid"].unlock()), timeout = 7,
                                   )
         except asyncio.TimeoutError:
             pass
