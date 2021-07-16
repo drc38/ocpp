@@ -50,6 +50,7 @@ async def test_cms_responses(hass):
                 cp.send_stop_transaction(),), timeout = 7,
                                   )
         except asyncio.TimeoutError:
+            pass
          
 
 class ChargePoint(cpclass):
