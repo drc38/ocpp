@@ -42,14 +42,14 @@ async def test_cms_responses(hass):
         "ws://localhost:9000/CP_1", subprotocols=["ocpp1.6"], close_timeout = 10
     ) as ws:
         cp = ChargePoint("CP_1_test", ws)
-        asyncio.gather(cp.start(),
-            cp.send_boot_notification(),
-            cp.send_start_transaction(),
-            cp.send_meter_data(),
-            cp.send_stop_transaction(),
-                      )
-        await asyncio.sleep(5)
-        await ws.wait_closed()
+        try:
+            await asyncio.wait_for(asyncio.gather(cp.start(),
+                cp.send_boot_notification(),
+                cp.send_start_transaction(),
+                cp.send_meter_data(),
+                cp.send_stop_transaction(),
+                    ), timeout = 7)
+        except asyncio.TimeoutError:
          
 
 class ChargePoint(cpclass):
