@@ -17,6 +17,7 @@ from ocpp.v16.enums import (
     ChargePointErrorCode,
     ChargePointStatus,
     ChargingProfileStatus,
+    ClearChargingProfileStatus,
     ConfigurationStatus,
     DataTransferStatus,
     FirmwareStatus,
