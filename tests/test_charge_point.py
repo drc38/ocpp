@@ -68,25 +68,25 @@ class ChargePoint(cpclass):
         """Handle a get configuration requests."""
         if key[0] == ConfigurationKey.supported_feature_profiles.value:
             return call_result.GetConfigurationPayload(
-                configuration_key=[{"key":key[0], "readonly": "false", "value": "Core,FirmwareManagement,SmartCharging"}]
+                configuration_key=[{"key":key[0], "readonly": False, "value": "Core,FirmwareManagement,SmartCharging"}]
             )
         if key[0] == ConfigurationKey.heartbeat_interval.value:
-            return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": "false", "value":"300"}])
+            return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":"300"}])
         if key[0] == ConfigurationKey.number_of_connectors.value:
-            return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": "false", "value":"1"}])
+            return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":"1"}])
         if key[0] == ConfigurationKey.web_socket_ping_interval.value:
-            return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": "false", "value":"60"}])
+            return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":"60"}])
         if key[0] == ConfigurationKey.meter_values_sampled_data.value:
             return call_result.GetConfigurationPayload(
-                configuration_key=[{"key":key[0], "readonly": "false", "value":"energy_reactive_import_register"}]
+                configuration_key=[{"key":key[0], "readonly": False, "value":"energy_reactive_import_register"}]
             )
         if key[0] == ConfigurationKey.meter_value_sample_interval.value:
-            return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": "false", "value":"60"}])
+            return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":"60"}])
         if key[0] == ConfigurationKey.charging_schedule_allowed_charging_rate_unit.value:
-            return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": "false", "value":"Current"}])
+            return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":"Current"}])
         if key[0] == ConfigurationKey.authorize_remote_tx_requests.value:
-            return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": "false", "value":"false"}])
-        return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": "false", "value":""}])
+            return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":"false"}])
+        return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":""}])
 
     @on(Action.ChangeConfiguration)
     def on_change_configuration(self, **kwargs):
