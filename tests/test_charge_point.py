@@ -63,8 +63,6 @@ async def test_cms_responses(hass):
                     cp.send_stop_transaction(),
                     cs.charge_points["test_cpid"].start_transaction(),
                     cs.charge_points["test_cpid"].reset(),
-                    cs.charge_points["test_cpid"].trigger_boot_notification(),
-                    cs.charge_points["test_cpid"].trigger_status_notification(),
                     cs.charge_points["test_cpid"].set_charge_rate(),
                     cs.charge_points["test_cpid"].clear_profile(),
                     cs.charge_points["test_cpid"].update_firmware(
@@ -82,7 +80,6 @@ async def test_cms_responses(hass):
         assert cs.get_unit("test_cpid", "Energy.Active.Import.Register") == "kWh"
     await async_unload_entry(hass, config_entry)
     await hass.async_block_till_done()
-
 
 
 class ChargePoint(cpclass):
@@ -153,7 +150,6 @@ class ChargePoint(cpclass):
             configuration_key=[{"key": key[0], "readonly": False, "value": ""}]
         )
 
-
     @on(Action.ChangeConfiguration)
     def on_change_configuration(self, **kwargs):
         """Handle a get configuration request."""
@@ -191,7 +187,6 @@ class ChargePoint(cpclass):
             ClearChargingProfileStatus.accepted
         )
 
-
     @on(Action.TriggerMessage)
     def on_trigger_message(self, **kwargs):
         """Handle trigger message request."""
@@ -228,8 +223,7 @@ class ChargePoint(cpclass):
             status=FirmwareStatus.downloaded
         )
         resp = await self.call(request)
-        assert len(resp) > 0
-
+        assert resp is not None
 
     async def send_data_transfer(self):
         """Send a data transfer."""
@@ -265,9 +259,7 @@ class ChargePoint(cpclass):
             vendor_error_code="Test error",
         )
         resp = await self.call(request)
-        assert len(resp) > 0
-
-        # check an error is not thrown?
+        assert resp is not None
 
     async def send_meter_data(self):
         """Send meter data notification."""
@@ -419,9 +411,7 @@ class ChargePoint(cpclass):
             ],
         )
         resp = await self.call(request)
-        assert len(resp) > 0
-
-        # check an error is not thrown?
+        assert resp is not None
 
     async def send_stop_transaction(self):
         """Send a stop transaction notification."""
