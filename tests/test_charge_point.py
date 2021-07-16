@@ -125,7 +125,7 @@ class ChargePoint(cpclass):
     @on(Action.RemoteStartTransaction)
     def on_remote_start_transaction(self, **kwargs):
         """Handle remote start request."""
-        return call_result.RemoteStartTransaction(RemoteStartStopStatus.accepted)
+        return call_result.RemoteStartTransactionPayload(RemoteStartStopStatus.accepted)
 
     async def send_boot_notification(self):
         """Send a boot notification."""
