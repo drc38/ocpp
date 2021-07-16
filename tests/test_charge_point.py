@@ -57,9 +57,9 @@ async def test_cms_responses(hass):
                 cp.send_start_transaction(),
                 cp.send_meter_data(),
                 cp.send_stop_transaction(),
-                #cs.charge_points["test_cpid"].unlock(),
-                #cs.charge_points["test_cpid"].reset(),
-                #cs.charge_points["test_cpid"].set_charge_rate(),
+                cs.charge_points["test_cpid"].unlock(),
+                cs.charge_points["test_cpid"].reset(),
+                cs.charge_points["test_cpid"].set_charge_rate(),
                 cs.charge_points["test_cpid"].start_transaction()), timeout = 7,
                                   )
         except asyncio.TimeoutError:
@@ -98,7 +98,7 @@ class ChargePoint(cpclass):
         if key[0] == ConfigurationKey.charging_schedule_allowed_charging_rate_unit.value:
             return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":"Current"}])
         if key[0] == ConfigurationKey.authorize_remote_tx_requests.value:
-            return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":"false"}])
+            return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":False}])
         if key[0] == ConfigurationKey.charge_profile_max_stack_level.value:
             return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":"3"}])
         return call_result.GetConfigurationPayload(configuration_key=[{"key":key[0], "readonly": False, "value":""}])
