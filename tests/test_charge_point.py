@@ -67,8 +67,8 @@ async def test_cms_responses(hass):
                                   )
         except asyncio.TimeoutError:
             pass
-        assert int(cs.get_metric("test_cpid","Energy.Active.Import.Register")) == 1305570
-        assert cs.get_unit("test_cpid","Energy.Active.Import.Register") == "Wh"
+        assert int(cs.get_metric("test_cpid","Energy.Active.Import.Register")) == int(1305570/1000)
+        assert cs.get_unit("test_cpid","Energy.Active.Import.Register") == "kWh"
     await async_unload_entry(hass, config_entry)
     await hass.async_block_till_done()
          
