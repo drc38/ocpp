@@ -49,6 +49,7 @@ async def test_cms_responses(hass):
             cp.send_stop_transaction(),
                       )
         await asyncio.sleep(8)
+        await ws.wait_closed()
          
 
 class ChargePoint(cpclass):
