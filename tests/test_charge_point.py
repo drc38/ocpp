@@ -25,6 +25,7 @@ from ocpp.v16.enums import (
     ResetStatus,
     TriggerMessageStatus,
     UnlockStatus,
+    UpdateFirmwareStatus,
 )
 
 from .const import MOCK_CONFIG_DATA
@@ -60,6 +61,7 @@ async def test_cms_responses(hass):
                 cs.charge_points["test_cpid"].start_transaction(),
                 cs.charge_points["test_cpid"].reset(),
                 cs.charge_points["test_cpid"].set_charge_rate(),
+                cs.charge_points["test_cpid"].update_firmware(),
                 cs.charge_points["test_cpid"].unlock()), timeout = 7,
                                   )
         except asyncio.TimeoutError:
@@ -137,6 +139,11 @@ class ChargePoint(cpclass):
     def on_trigger_message(self, **kwargs):
         """Handle set charging profile request."""
         return call_result.TriggerMessagePayload(TriggerMessageStatus.accepted)
+    
+    @on(Action.UpdateFirmware)
+    def on_trigger_message(self, **kwargs):
+        """Handle set charging profile request."""
+        return call_result.UpdateFirmwarePayload(UpdateFirmwareStatus.accepted)
 
     async def send_boot_notification(self):
         """Send a boot notification."""
