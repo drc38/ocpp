@@ -25,7 +25,6 @@ from ocpp.v16.enums import (
     ResetStatus,
     TriggerMessageStatus,
     UnlockStatus,
-    UpdateFirmwareStatus,
 )
 
 from .const import MOCK_CONFIG_DATA
@@ -143,7 +142,7 @@ class ChargePoint(cpclass):
     @on(Action.UpdateFirmware)
     def on_trigger_message(self, **kwargs):
         """Handle set charging profile request."""
-        return call_result.UpdateFirmwarePayload(UpdateFirmwareStatus.accepted)
+        return call_result.UpdateFirmwarePayload()
 
     async def send_boot_notification(self):
         """Send a boot notification."""
