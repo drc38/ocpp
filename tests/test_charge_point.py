@@ -42,18 +42,13 @@ async def test_cms_responses(hass):
         "ws://localhost:9000/CP_1", subprotocols=["ocpp1.6"], close_timeout = 10
     ) as ws:
         cp = ChargePoint("CP_1_test", ws)
-        loop = True
-        while loop:
-            out = await asyncio.gather(cp.start())
-            await cp.send_boot_notification()
-            await cp.send_start_transaction()
-            await cp.send_meter_data()
-            await cp.send_stop_transaction()
-            if ws.closed:
-                ws = websockets.connect("ws://localhost:9000/CP_1", subprotocols=["ocpp1.6"], close_timeout = 10)
-            await asyncio.sleep(1)
-            if out.done():
-                loop = False
+        out = await cp.start()
+        await cp.send_boot_notification()
+        await cp.send_start_transaction()
+        await cp.send_meter_data()
+        await cp.send_stop_transaction()
+        ws.close()
+         
 
 class ChargePoint(cpclass):
     """Representation of real client Charge Point."""
