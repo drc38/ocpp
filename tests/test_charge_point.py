@@ -16,6 +16,7 @@ from ocpp.v16.enums import (
     AvailabilityStatus,
     ChargePointErrorCode,
     ChargePointStatus,
+    ChargingProfileStatus,
     ConfigurationStatus,
     DataTransferStatus,
     FirmwareStatus,
@@ -126,6 +127,11 @@ class ChargePoint(cpclass):
     def on_remote_start_transaction(self, **kwargs):
         """Handle remote start request."""
         return call_result.RemoteStartTransactionPayload(RemoteStartStopStatus.accepted)
+    
+    @on(Action.SetChargingProfile)
+    def on_set_charging_profile(self, **kwargs):
+        """Handle set charging profile request."""
+        return call_result.SetChargingProfilePayload(ChargingProfileStatus.accepted)
 
     async def send_boot_notification(self):
         """Send a boot notification."""
