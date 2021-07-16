@@ -48,7 +48,7 @@ async def test_cms_responses(hass):
             cp.send_meter_data(),
             cp.send_stop_transaction(),
                       )
-        await asyncio.sleep(8)
+        await asyncio.sleep(5)
         await ws.wait_closed()
          
 
