@@ -123,7 +123,7 @@ async def test_switches(hass):
         result = await hass.services.async_call(
             SWITCH,
             SERVICE_TURN_OFF,
-            service_data={ATTR_ENTITY_ID: f"{SWITCH}.CP_1_{switch['name']}"},
+            service_data={ATTR_ENTITY_ID: f"{SWITCH}.cp_1_{switch['name'].lower()}"},
             blocking=True,
         )
         assert result
@@ -132,7 +132,9 @@ async def test_switches(hass):
             result = await hass.services.async_call(
                 SWITCH,
                 SERVICE_TURN_ON,
-                service_data={ATTR_ENTITY_ID: f"{SWITCH}.CP_1_{switch['name']}"},
+                service_data={
+                    ATTR_ENTITY_ID: f"{SWITCH}.cp_1_{switch['name'].lower()}"
+                },
                 blocking=True,
             )
             assert result
