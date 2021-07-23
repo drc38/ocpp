@@ -9,7 +9,11 @@ import websockets
 
 from custom_components.ocpp import async_setup_entry, async_unload_entry
 from custom_components.ocpp.const import DOMAIN, SWITCH
-from custom_components.ocpp.enums import ConfigurationKey
+from custom_components.ocpp.enums import (
+    ConfigurationKey,
+    HAChargerServices,
+    HAChargerStatuses,
+)
 from ocpp.routing import on
 from ocpp.v16 import ChargePoint as cpclass, call, call_result
 from ocpp.v16.enums import (
@@ -31,7 +35,6 @@ from ocpp.v16.enums import (
 )
 
 from .const import MOCK_CONFIG_DATA
-from .enums import HAChargerServices, HAChargerStatuses
 
 SWITCH_CHARGE = {
     "name": "Charge_Control",
