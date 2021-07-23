@@ -116,7 +116,7 @@ async def test_cms_responses(hass):
     await hass.async_block_till_done()
 
 
-async def test_switches(self, hass):
+async def test_switches(hass):
     """Test switch operations."""
 
     for switch in SWITCHES:
