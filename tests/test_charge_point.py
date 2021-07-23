@@ -2,11 +2,13 @@
 import asyncio
 from datetime import datetime, timezone  # timedelta,
 
+from homeassistant.components.switch import SERVICE_TURN_OFF, SERVICE_TURN_ON
+from homeassistant.const import ATTR_ENTITY_ID
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 import websockets
 
 from custom_components.ocpp import async_setup_entry, async_unload_entry
-from custom_components.ocpp.const import DOMAIN
+from custom_components.ocpp.const import DOMAIN, SWITCH
 from custom_components.ocpp.enums import ConfigurationKey
 from ocpp.routing import on
 from ocpp.v16 import ChargePoint as cpclass, call, call_result
@@ -29,6 +31,34 @@ from ocpp.v16.enums import (
 )
 
 from .const import MOCK_CONFIG_DATA
+from .enums import HAChargerServices, HAChargerStatuses
+
+SWITCH_CHARGE = {
+    "name": "Charge_Control",
+    "on": HAChargerServices.service_charge_start.name,
+    "off": HAChargerServices.service_charge_stop.name,
+    "metric": HAChargerStatuses.status.value,
+    "condition": ChargePointStatus.charging.value,
+}
+SWITCH_AVAILABILITY = {
+    "name": "Availability",
+    "on": HAChargerServices.service_availability.name,
+    "off": HAChargerServices.service_availability.name,
+    "default": True,
+    "metric": HAChargerStatuses.status.value,
+    "condition": ChargePointStatus.available.value,
+}
+SWITCH_RESET = {
+    "name": "Reset",
+    "on": HAChargerServices.service_reset.name,
+    "pulse": True,
+}
+SWITCH_UNLOCK = {
+    "name": "Unlock",
+    "on": HAChargerServices.service_unlock.name,
+    "pulse": True,
+}
+SWITCHES = [SWITCH_CHARGE, SWITCH_RESET, SWITCH_UNLOCK, SWITCH_AVAILABILITY]
 
 
 async def test_cms_responses(hass):
@@ -69,6 +99,7 @@ async def test_cms_responses(hass):
                         "http://www.charger.com/file.bin"
                     ),
                     cs.charge_points["test_cpid"].unlock(),
+                    test_switches(hass),
                 ),
                 timeout=7,
             )
@@ -80,6 +111,28 @@ async def test_cms_responses(hass):
         assert cs.get_unit("test_cpid", "Energy.Active.Import.Register") == "kWh"
     await async_unload_entry(hass, config_entry)
     await hass.async_block_till_done()
+
+
+async def test_switches(self, hass):
+    """Test switch operations."""
+
+    for switch in SWITCHES:
+        result = await hass.services.async_call(
+            SWITCH,
+            SERVICE_TURN_OFF,
+            service_data={ATTR_ENTITY_ID: f"{SWITCH}.CP_1_{switch['name']}"},
+            blocking=True,
+        )
+        assert result
+
+        if switch.get("pulse", False) is not True:
+            result = await hass.services.async_call(
+                SWITCH,
+                SERVICE_TURN_ON,
+                service_data={ATTR_ENTITY_ID: f"{SWITCH}.CP_1_{switch['name']}"},
+                blocking=True,
+            )
+            assert result
 
 
 class ChargePoint(cpclass):
