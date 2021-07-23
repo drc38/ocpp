@@ -704,6 +704,7 @@ class ChargePoint(cp):
                     + value[Phase.l3_n.value]
                 )
                 self._metrics[metric] = round(sum / 3, 1)
+
             if metric in [
                 Measurand.current_import.value,
                 Measurand.current_export.value,
