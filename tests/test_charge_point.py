@@ -131,7 +131,7 @@ async def test_cms_responses(hass):
                 ),
                 timeout=5,
             )
-            # await test_switches(hass)
+            await test_switches(hass)
         except asyncio.TimeoutError:
             pass
         assert int(cs.get_metric("test_cpid", "Energy.Active.Import.Register")) == int(
