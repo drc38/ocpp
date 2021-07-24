@@ -66,6 +66,32 @@ SWITCHES = [SWITCH_CHARGE, SWITCH_RESET, SWITCH_UNLOCK, SWITCH_AVAILABILITY]
 
 async def test_cms_responses(hass):
     """Test central system responses to a charger."""
+
+    async def test_switches(hass):
+        """Test switch operations."""
+
+        for switch in SWITCHES:
+            result = await hass.services.async_call(
+                SWITCH,
+                SERVICE_TURN_ON,
+                service_data={
+                    ATTR_ENTITY_ID: f"{SWITCH}.test_cpid_{switch['name'].lower()}"
+                },
+                blocking=True,
+            )
+            assert result
+
+            if switch.get("pulse", False) is not True:
+                result = await hass.services.async_call(
+                    SWITCH,
+                    SERVICE_TURN_OFF,
+                    service_data={
+                        ATTR_ENTITY_ID: f"{SWITCH}.test_cpid_{switch['name'].lower()}"
+                    },
+                    blocking=True,
+                )
+                assert result
+
     # Create a mock entry so we don't have to go through config flow
     config_entry = MockConfigEntry(
         domain=DOMAIN, data=MOCK_CONFIG_DATA, entry_id="test_cms"
@@ -114,32 +140,6 @@ async def test_cms_responses(hass):
         assert cs.get_unit("test_cpid", "Energy.Active.Import.Register") == "kWh"
     await async_unload_entry(hass, config_entry)
     await hass.async_block_till_done()
-
-
-async def test_switches(hass):
-    """Test switch operations."""
-
-    for switch in SWITCHES:
-        result = await hass.services.async_call(
-            SWITCH,
-            SERVICE_TURN_OFF,
-            service_data={
-                ATTR_ENTITY_ID: f"{SWITCH}.test_cpid_{switch['name'].lower()}"
-            },
-            blocking=True,
-        )
-        assert result
-
-        if switch.get("pulse", False) is not True:
-            result = await hass.services.async_call(
-                SWITCH,
-                SERVICE_TURN_ON,
-                service_data={
-                    ATTR_ENTITY_ID: f"{SWITCH}.test_cpid_{switch['name'].lower()}"
-                },
-                blocking=True,
-            )
-            assert result
 
 
 class ChargePoint(cpclass):
