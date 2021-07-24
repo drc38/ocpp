@@ -235,6 +235,11 @@ class ChargePoint(cpclass):
         """Handle remote start request."""
         return call_result.RemoteStartTransactionPayload(RemoteStartStopStatus.accepted)
 
+    @on(Action.RemoteStopTransaction)
+    def on_remote_stop_transaction(self, **kwargs):
+        """Handle remote stop request."""
+        return call_result.RemoteStopTransactionPayload(RemoteStartStopStatus.accepted)
+
     @on(Action.SetChargingProfile)
     def on_set_charging_profile(self, **kwargs):
         """Handle set charging profile request."""
