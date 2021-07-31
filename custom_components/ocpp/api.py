@@ -3,7 +3,6 @@ import asyncio
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 import logging
-from math import sqrt
 import time
 from typing import Dict
 
@@ -738,7 +737,7 @@ class ChargePoint(cp):
 
     def process_phases(self, data):
         """Process phase data from meter values payload."""
-        measurand_data = {}
+        extra_attr = {}
         for sv in data:
             # create ordered Dict for each measurand, eg {"voltage":{"unit":"V","L1":"230"...}}
             measurand = sv.get(om.measurand.value, None)
@@ -774,8 +773,6 @@ class ChargePoint(cp):
             elif metric in [
                 Measurand.current_import.value,
                 Measurand.current_export.value,
-                Measurand.power_active_import.value,
-                Measurand.power_active_export.value,
             ]:
                 """Line currents and powers are summed."""
                 if Phase.l1.value in phase_info:
