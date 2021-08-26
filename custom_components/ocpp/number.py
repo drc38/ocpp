@@ -4,7 +4,7 @@ import voluptuous as vol
 
 from .api import CentralSystem
 from .const import CONF_CPID, DEFAULT_CPID, DOMAIN, NUMBERS
-from .enums import Profiles
+from .enums import HAChargerDetails as cdet, Profiles
 
 
 async def async_setup_entry(hass, entry, async_add_devices):
@@ -45,8 +45,11 @@ class Number(InputNumber):
     @property
     def available(self) -> bool:
         """Return if entity is available."""
-        if not (
-            Profiles.SMART & self.central_system.get_supported_features(self.cp_id)
+        if self.central_system.get_metric(self.cp_id, cdet.features.value) is None:
+            return False
+        elif not (
+            Profiles.SMART
+            not in self.central_system.get_metric(self.cp_id, cdet.features.value)
         ):
             return False
         return self.central_system.get_available(self.cp_id)  # type: ignore [no-any-return]
