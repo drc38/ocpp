@@ -193,6 +193,12 @@ class CentralSystem:
             return self.charge_points[cp_id].status == STATE_OK
         return False
 
+    def get_supported_features(self, cp_id: str):
+        """Return what profiles the charger supports."""
+        if cp_id in self.charge_points:
+            return self.charge_points[cp_id].supported_features
+        return None
+
     async def set_max_charge_rate_amps(self, cp_id: str, value: float):
         """Set the maximum charge rate in amps."""
         if cp_id in self.charge_points:
@@ -738,6 +744,7 @@ class ChargePoint(cp):
                     measurand_data[measurand] = {}
                 measurand_data[measurand][om.unit.value] = unit
                 measurand_data[measurand][phase] = float(value)
+                self._metrics[measurand].unit = unit
                 self._metrics[measurand].extra_attr[om.unit.value] = unit
                 self._metrics[measurand].extra_attr[phase] = float(value)
 
