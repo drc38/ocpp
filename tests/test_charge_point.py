@@ -4,7 +4,6 @@ from datetime import datetime, timezone  # timedelta,
 
 from homeassistant.components.switch import SERVICE_TURN_OFF, SERVICE_TURN_ON
 from homeassistant.const import ATTR_ENTITY_ID
-import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 import websockets
 
@@ -99,16 +98,15 @@ async def test_cms_responses(hass):
             )
             assert result
             # test invalid exception is raised when out of bounds value passed
-            with pytest.raises(Exception):
-                result = await hass.services.async_call(
-                    NUMBER,
-                    "set_value",
-                    service_data={"value": "100"},
-                    blocking=True,
-                    target={
-                        ATTR_ENTITY_ID: f"{NUMBER}.test_cpid_{number['name'].lower()}"
-                    },
-                )
+            # with pytest.raises(Exception):
+            result = await hass.services.async_call(
+                NUMBER,
+                "set_value",
+                service_data={"value": "100"},
+                blocking=True,
+                target={ATTR_ENTITY_ID: f"{NUMBER}.test_cpid_{number['name'].lower()}"},
+            )
+            assert result
 
     # Create a mock entry so we don't have to go through config flow
     config_entry = MockConfigEntry(
