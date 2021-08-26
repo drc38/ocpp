@@ -4,6 +4,7 @@ from datetime import datetime, timezone  # timedelta,
 
 from homeassistant.components.switch import SERVICE_TURN_OFF, SERVICE_TURN_ON
 from homeassistant.const import ATTR_ENTITY_ID
+import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 import websockets
 
@@ -97,6 +98,17 @@ async def test_cms_responses(hass):
                 target={ATTR_ENTITY_ID: f"{NUMBER}.test_cpid_{number['name'].lower()}"},
             )
             assert result
+            # test invalid exception is raised when out of bounds value passed
+            with pytest.raises(Exception):
+                result = await hass.services.async_call(
+                    NUMBER,
+                    "set_value",
+                    service_data={"value": "100"},
+                    blocking=True,
+                    target={
+                        ATTR_ENTITY_ID: f"{NUMBER}.test_cpid_{number['name'].lower()}"
+                    },
+                )
 
     # Create a mock entry so we don't have to go through config flow
     config_entry = MockConfigEntry(
@@ -379,7 +391,7 @@ class ChargePoint(cpclass):
                     "timestamp": "2021-06-21T16:15:09Z",
                     "sampledValue": [
                         {
-                            "value": "1305590.000",
+                            "value": "1308590.000",
                             "context": "Sample.Periodic",
                             "measurand": "Energy.Active.Import.Register",
                             "location": "Outlet",
