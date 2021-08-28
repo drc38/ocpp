@@ -40,8 +40,9 @@ SLEEP_TIME = 60
 NUMBER = "number"
 SENSOR = "sensor"
 SWITCH = "switch"
+CHARGER = "charger"
 
-PLATFORMS = [SENSOR, SWITCH, NUMBER]
+PLATFORMS = [SENSOR, SWITCH, NUMBER, CHARGER]
 
 # Ocpp supported measurands
 MEASURANDS = [
