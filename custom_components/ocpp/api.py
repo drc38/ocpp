@@ -280,15 +280,16 @@ class ChargePoint(cp):
         self._metrics[csess.meter_start.value].unit = UnitOfMeasure.kwh.value
         self._attr_supported_features: int = 0
 
+    async def handle_clear_profile(self):
+        """Handle the clear profile service call."""
+        if self.status == STATE_UNAVAILABLE:
+            _LOGGER.warning("%s charger is currently unavailable", self.id)
+            return
+        await self.clear_profile()
+
     async def post_connect(self):
         """Logic to be executed right after a charger connects."""
         # Define custom service handles for charge point
-        async def handle_clear_profile(call):
-            """Handle the clear profile service call."""
-            if self.status == STATE_UNAVAILABLE:
-                _LOGGER.warning("%s charger is currently unavailable", self.id)
-                return
-            await self.clear_profile()
 
         async def handle_update_firmware(call):
             """Handle the firmware update service call."""
@@ -365,7 +366,7 @@ class ChargePoint(cp):
             )
             if prof.SMART in self._attr_supported_features:
                 platform.async_register_entity_service(
-                    csvcs.service_clear_profile.value, {}, handle_clear_profile
+                    csvcs.service_clear_profile.value, {}, "handle_clear_profile"
                 )
             if prof.FW in self._attr_supported_features:
                 self.hass.services.async_register(

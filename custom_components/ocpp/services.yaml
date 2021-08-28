@@ -3,6 +3,7 @@ clear_profile:
   description: Clears all charging profiles (limits) set (dependent on charger support)
   target:
     device:
+      integration: "ocpp"
 
 update_firmware:
   name: Update charger firmware
