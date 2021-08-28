@@ -1,42 +1,8 @@
-# Service ID
-set_charge_rate:
-  # Service name as shown in UI
-  name: Set maximum charge rate
-  # Description of the service
-  description: Sets the maximum charge rate in Amps or Watts (dependent on charger support)
-  # If the service accepts entity IDs, target allows the user to specify entities by entity, device, or area. If `target` is specified, `entity_id` should not be defined in the `fields` map. By default it shows only targets matching entities from the same domain as the service, but if further customization is required, target supports the entity, device, and area selectors (https://www.home-assistant.io/docs/blueprint/selectors/). Entity selector parameters will automatically be applied to device and area, and device selector parameters will automatically be applied to area. 
-  #target:
-  #   entity:
-  #     integration: ocpp
-  # Different fields that your service accepts
-  fields:
-    # Key of the field
-    limit_amps:
-      # Field name as shown in UI
-      name: Limit (A)
-      # Description of the field
-      description: Maximum charge rate in Amps
-      # Whether or not field is required (default = false)
-      required: false
-      # Advanced fields are only shown when the advanced mode is enabled for the user (default = false)
-      advanced: true
-      # Example value that can be passed for this field
-      example: 16
-      # The default field value
-      default: 32
-    limit_watts:
-      name: Limit (W)
-      description: Maximum charge rate in Watts
-      required: false
-      advanced: true
-      example: 1500
-      default: 22000
-      
 clear_profile:
   name: Clear charging profiles
+  description: Clears all charging profiles (limits) set (dependent on charger support)
   target:
     device:
-  description: Clears all charging profiles (limits) set (dependent on charger support)
 
 update_firmware:
   name: Update charger firmware
