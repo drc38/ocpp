@@ -349,7 +349,7 @@ class ChargePoint(cp):
             #            await self.start_transaction()
 
             # Register custom services with home assistant
-            platform = entity_platform.async_get_platforms(self.hass, DOMAIN)
+            platform = entity_platform.async_get_platforms(self.hass, DOMAIN)[0]
 
             self.hass.services.async_register(
                 DOMAIN,
