@@ -10,7 +10,7 @@ from typing import Dict
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_OK, STATE_UNAVAILABLE, TIME_MINUTES
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import device_registry, entity_platform
+from homeassistant.helpers import EntityComponent, device_registry, entity_platform
 import voluptuous as vol
 import websockets
 
@@ -90,8 +90,10 @@ GDIAG_SERVICE_DATA_SCHEMA = vol.Schema(
 )
 
 
-async def async_setup_entry(hass, entry, async_add_devices):
-    """Configure the charger platform."""
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Set up a config entry."""
+    component: EntityComponent = hass.data[DOMAIN]
+    return await component.async_setup_entry(entry)
 
 
 class ChargePoint(cp):
