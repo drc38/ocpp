@@ -365,7 +365,7 @@ class ChargePoint(cp):
             )
             if prof.SMART in self._attr_supported_features:
                 platform.async_register_entity_service(
-                    DOMAIN, csvcs.service_clear_profile.value, handle_clear_profile
+                    csvcs.service_clear_profile.value, handle_clear_profile
                 )
             if prof.FW in self._attr_supported_features:
                 self.hass.services.async_register(
