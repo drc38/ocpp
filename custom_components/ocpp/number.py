@@ -4,7 +4,7 @@ import voluptuous as vol
 
 from .api import CentralSystem
 from .const import CONF_CPID, DEFAULT_CPID, DOMAIN, NUMBERS
-from .enums import Profiles
+from .enums import HAChargerDetails as cdet, Profiles
 
 
 async def async_setup_entry(hass, entry, async_add_devices):
