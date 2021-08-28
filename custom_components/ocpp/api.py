@@ -10,7 +10,12 @@ from typing import Dict
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_OK, STATE_UNAVAILABLE, TIME_MINUTES
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import device_registry, entity_component, entity_registry
+from homeassistant.helpers import (
+    device_registry,
+    entity_component,
+    entity_platform,
+    entity_registry,
+)
 import voluptuous as vol
 import websockets
 
@@ -344,6 +349,8 @@ class ChargePoint(cp):
             #            await self.start_transaction()
 
             # Register custom services with home assistant
+            platform = entity_platform.async_get_current_platform()
+
             self.hass.services.async_register(
                 DOMAIN,
                 csvcs.service_configure.value,
@@ -357,7 +364,7 @@ class ChargePoint(cp):
                 GCONF_SERVICE_DATA_SCHEMA,
             )
             if prof.SMART in self._attr_supported_features:
-                self.hass.services.async_register(
+                platform.async_register_entity_service(
                     DOMAIN, csvcs.service_clear_profile.value, handle_clear_profile
                 )
             if prof.FW in self._attr_supported_features:

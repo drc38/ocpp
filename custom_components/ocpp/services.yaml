@@ -34,6 +34,8 @@ set_charge_rate:
       
 clear_profile:
   name: Clear charging profiles
+  target:
+    device:
   description: Clears all charging profiles (limits) set (dependent on charger support)
 
 update_firmware:
