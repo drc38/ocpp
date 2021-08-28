@@ -10,7 +10,8 @@ from typing import Dict
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_OK, STATE_UNAVAILABLE, TIME_MINUTES
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import EntityComponent, device_registry, entity_platform
+from homeassistant.helpers import device_registry, entity_platform
+from homeassistant.helpers.entity_component import EntityComponent
 import voluptuous as vol
 import websockets
 
