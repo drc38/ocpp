@@ -43,7 +43,6 @@ from ocpp.v16.enums import (
     UnlockStatus,
 )
 
-from .api import CentralSystem
 from .const import (
     CONF_METER_INTERVAL,
     CONF_MONITORED_VARIABLES,
@@ -104,7 +103,7 @@ class ChargePoint(cp):
         connection,
         hass: HomeAssistant,
         entry: ConfigEntry,
-        central: CentralSystem,
+        central,
         interval_meter_metrics: int = 10,
     ):
         """Instantiate instance of a ChargePoint."""
