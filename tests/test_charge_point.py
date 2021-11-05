@@ -34,7 +34,7 @@ from ocpp.v16.enums import (
 from .const import MOCK_CONFIG_DATA
 
 
-async def test_cms_responses(hass, socket_enabled):
+async def test_cms_responses(hass):
     """Test central system responses to a charger."""
 
     async def test_switches(hass):

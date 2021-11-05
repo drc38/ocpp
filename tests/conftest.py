@@ -2,8 +2,14 @@
 from unittest.mock import patch
 
 import pytest
+from pytest_socket import enable_socket
 
 pytest_plugins = "pytest_homeassistant_custom_component"
+
+
+def pytest_runtest_setup():
+    """Enable socket for tests - default is to disable."""
+    enable_socket()
 
 
 @pytest.fixture(autouse=True)
