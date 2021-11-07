@@ -2,27 +2,8 @@
 from unittest.mock import patch
 
 import pytest
-import pytest_socket
 
 pytest_plugins = "pytest_homeassistant_custom_component"
-
-
-def pytest_runtest_setup():
-    """Enable socket for tests - default is to disable."""
-    pytest_socket.enable_socket()
-
-
-# @pytest.fixture(scope='function')
-# def socket_enabled():
-#     """Enable socket.socket for duration of this test function.
-#     This incorporates changes from https://github.com/miketheman/pytest-socket/pull/76
-#     and hardcodes allow_unix_socket to True because it's not passed on the command line.
-#     """
-#     socket_was_disabled = socket.socket != pytest_socket._true_socket
-#     pytest_socket.enable_socket()
-#     yield
-#     if socket_was_disabled:
-#         disable_socket(allow_unix_socket=True)
 
 
 @pytest.fixture(autouse=True)
