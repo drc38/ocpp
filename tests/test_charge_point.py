@@ -4,6 +4,7 @@ from datetime import datetime, timezone  # timedelta,
 
 from homeassistant.components.switch import SERVICE_TURN_OFF, SERVICE_TURN_ON
 from homeassistant.const import ATTR_ENTITY_ID
+import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 import websockets
 
@@ -34,6 +35,7 @@ from ocpp.v16.enums import (
 from .const import MOCK_CONFIG_DATA
 
 
+@pytest.mark.enable_socket
 async def test_cms_responses(hass, socket_enabled):
     """Test central system responses to a charger."""
 
