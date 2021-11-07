@@ -35,7 +35,7 @@ from ocpp.v16.enums import (
 from .const import MOCK_CONFIG_DATA
 
 
-@pytest.mark.enable_socket
+@pytest.fixture(scope="module")
 async def test_cms_responses(hass, socket_enabled):
     """Test central system responses to a charger."""
 
