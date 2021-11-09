@@ -8,19 +8,9 @@ import pytest_socket
 pytest_plugins = "pytest_homeassistant_custom_component"
 
 
-@pytest.fixture(scope="session")
-def socket_enabled(pytestconfig):
-    """Enable socket.socket for duration of this test function.
+@pytest.fixture(autouse=True)
+def test_cms_responses(hass, socket_enabled)
 
-    This incorporates changes from https://github.com/miketheman/pytest-socket/pull/76
-    and hardcodes allow_unix_socket to True because it's not passed on the command line.
-    """
-
-    socket_was_disabled = socket.socket != pytest_socket._true_socket
-    pytest_socket.enable_socket()
-    yield
-    if socket_was_disabled:
-        pytest_socket.disable_socket(allow_unix_socket=True)
 
 
 @pytest.fixture(autouse=True)
