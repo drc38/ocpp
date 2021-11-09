@@ -8,9 +8,10 @@ import pytest_socket
 pytest_plugins = "pytest_homeassistant_custom_component"
 
 
-@pytest.fixture(autouse=True)
-def test_cms_responses(hass, socket_enabled):
 
+def pytest_runtest_setup():
+    pytest_socket.remove_host_restrictions()
+    pytest_socket.enable_socket()
 
 
 @pytest.fixture(autouse=True)
