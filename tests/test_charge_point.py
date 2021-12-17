@@ -8,8 +8,9 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 import websockets
 
 from custom_components.ocpp import async_setup_entry, async_unload_entry
-from custom_components.ocpp.const import DOMAIN, NUMBER, NUMBERS, SWITCH, SWITCHES
+from custom_components.ocpp.const import DOMAIN, NUMBER, SWITCH, SWITCHES
 from custom_components.ocpp.enums import ConfigurationKey, HAChargerServices as csvcs
+from custom_components.ocpp.number import NUMBERS
 from ocpp.routing import on
 from ocpp.v16 import ChargePoint as cpclass, call, call_result
 from ocpp.v16.enums import (
@@ -97,7 +98,7 @@ async def test_cms_responses(hass, socket_enabled):
                 "set_value",
                 service_data={"value": "10"},
                 blocking=True,
-                target={ATTR_ENTITY_ID: f"{NUMBER}.test_cpid_{number['name'].lower()}"},
+                target={ATTR_ENTITY_ID: f"{NUMBER}.test_cpid_{number.key}"},
             )
             assert result
 
