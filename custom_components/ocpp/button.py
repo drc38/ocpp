@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Final
 
 from homeassistant.components.button import (
+    DOMAIN as BUTTON_DOMAIN,
     ButtonDeviceClass,
     ButtonEntity,
     ButtonEntityDescription,
@@ -15,15 +16,10 @@ from .enums import HAChargerServices
 
 
 @dataclass
-class OcppButtonDescriptionMixin:
-    """Mixin to describe a Button entity."""
-
-    press_action: str
-
-
-@dataclass
-class OcppButtonDescription(ButtonEntityDescription, OcppButtonDescriptionMixin):
+class OcppButtonDescription(ButtonEntityDescription):
     """Class to describe a Button entity."""
+
+    press_action: str = ""
 
 
 BUTTONS: Final = [
@@ -45,7 +41,8 @@ BUTTONS: Final = [
 
 
 async def async_setup_entry(hass, entry, async_add_devices):
-    """Configure the sensor platform."""
+    """Configure the Button platform."""
+ 
     central_system = hass.data[DOMAIN][entry.entry_id]
     cp_id = entry.data.get(CONF_CPID, DEFAULT_CPID)
 
@@ -73,24 +70,24 @@ class ChargePointButton(ButtonEntity):
         self.central_system = central_system
         self.entity_description = description
         self._attr_unique_id = ".".join(
-            ["button", DOMAIN, self.cp_id, self.entity_description.name]
+            [BUTTON_DOMAIN, DOMAIN, self.cp_id, self.entity_description.key]
         )
         self._attr_name = ".".join([self.cp_id, self.entity_description.name])
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, self.cp_id)},
             via_device=(DOMAIN, self.central_system.id),
         )
-        self.entity_id = "button." + "_".join(
-            [self.cp_id, self.entity_description.name]
+        self.entity_id = (
+            BUTTON_DOMAIN + "." + "_".join([self.cp_id, self.entity_description.key])
         )
 
     @property
     def available(self) -> bool:
-        """Return if switch is available."""
+        """Return charger availability."""
         return self.central_system.get_available(self.cp_id)  # type: ignore [no-any-return]
 
     async def async_press(self) -> None:
-        """Triggers the OTA update service."""
+        """Triggers the charger press action service."""
         await self.central_system.set_charger_state(
             self.cp_id, self.entity_description.press_action
         )
