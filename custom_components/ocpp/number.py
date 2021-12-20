@@ -1,4 +1,7 @@
 """Number platform for ocpp."""
+from __future__ import annotations
+
+from dataclasses import dataclass
 from typing import Final
 
 from homeassistant.components.number import (
@@ -13,11 +16,24 @@ from .api import CentralSystem
 from .const import CONF_CPID, DEFAULT_CPID, DOMAIN, ICON
 from .enums import Profiles
 
+
+@dataclass
+class OcppNumberDescription(NumberEntityDescription):
+    """Class to describe a Number entity."""
+
+    initial_value: float | None = None
+    # can be removed when dev branch released
+    max_value: float | None = None
+    min_value: float | None = None
+    step: float | None = None
+
+
 NUMBERS: Final = [
     NumberEntityDescription(
         key="maximum_current",
         name="Maximum_Current",
         icon=ICON,
+        initial_value=32,
         min_value=0,
         max_value=32,
         step=1,
@@ -41,11 +57,13 @@ async def async_setup_entry(hass, entry, async_add_devices):
 class OcppNumber(NumberEntity):
     """Individual slider for setting charge rate."""
 
+    entity_description: OcppNumberDescription
+
     def __init__(
         self,
         central_system: CentralSystem,
         cp_id: str,
-        description: NumberEntityDescription,
+        description: OcppNumberDescription,
     ):
         """Initialize a Number instance."""
         self.cp_id = cp_id
@@ -62,6 +80,11 @@ class OcppNumber(NumberEntity):
             identifiers={(DOMAIN, self.cp_id)},
             via_device=(DOMAIN, self.central_system.id),
         )
+        self._attr_value = self.entity_description.initial_value
+        # can be removed when dev branch released
+        self._attr_max_value = self.entity_description.max_value
+        self._attr_min_value = self.entity_description.min_value
+        self._attr_step = self.entity_description.step
 
     @property
     def available(self) -> bool:
