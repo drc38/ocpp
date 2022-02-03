@@ -41,7 +41,7 @@ from ocpp.v16.enums import (
     UnlockStatus,
 )
 
-from .const import MOCK_CONFIG_DATA
+from .const import MOCK_CONFIG_DATA, MOCK_CONFIG_TIMEOUT
 
 
 async def test_cms_responses(hass, socket_enabled):
@@ -266,7 +266,7 @@ async def test_socket_timeout(hass, socket_enabled, timeout_on_wait_for):
 
     # Create a mock entry so we don't have to go through config flow
     config_entry = MockConfigEntry(
-        domain=OCPP_DOMAIN, data=MOCK_CONFIG_DATA, entry_id="test_cms"
+        domain=OCPP_DOMAIN, data=MOCK_CONFIG_TIMEOUT, entry_id="test_cms"
     )
     assert await async_setup_entry(hass, config_entry)
     await hass.async_block_till_done()
@@ -275,7 +275,7 @@ async def test_socket_timeout(hass, socket_enabled, timeout_on_wait_for):
 
     # no subprotocol
     async with websockets.connect(
-        "ws://127.0.0.1:9001/CP_2",
+        "ws://127.0.0.1:9002/CP_2",
     ) as ws:
         cp = ChargePoint("CP_2_timeout", ws)
         cp.start()

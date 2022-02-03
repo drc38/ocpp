@@ -73,4 +73,17 @@ MOCK_CONFIG_SWITCH = {
     CONF_METER_INTERVAL: 60,
     CONF_MONITORED_VARIABLES: "Current.Export,Current.Import,Current.Offered,Energy.Active.Export.Register,Energy.Active.Import.Register,Energy.Reactive.Export.Register,Energy.Reactive.Import.Register,Energy.Active.Export.Interval,Energy.Active.Import.Interval,Energy.Reactive.Export.Interval,Energy.Reactive.Import.Interval,Frequency,Power.Active.Export,Power.Active.Import,Power.Factor,Power.Offered,Power.Reactive.Export,Power.Reactive.Import,RPM,SoC,Temperature,Voltage",
 }
+MOCK_CONFIG_TIMEOUT = {
+    CONF_HOST: "127.0.0.1",
+    CONF_PORT: 9002,
+    CONF_CPID: "test_cpid_3",
+    CONF_CSID: "test_csid_3",
+    CONF_IDLE_INTERVAL: 900,
+    CONF_METER_INTERVAL: 60,
+    CONF_MONITORED_VARIABLES: "Current.Export,Current.Import,Current.Offered,Energy.Active.Export.Register,Energy.Active.Import.Register,Energy.Reactive.Export.Register,Energy.Reactive.Import.Register,Energy.Active.Export.Interval,Energy.Active.Import.Interval,Energy.Reactive.Export.Interval,Energy.Reactive.Import.Interval,Frequency,Power.Active.Export,Power.Active.Import,Power.Factor,Power.Offered,Power.Reactive.Export,Power.Reactive.Import,RPM,SoC,Temperature,Voltage",
+    CONF_WEBSOCKET_CLOSE_TIMEOUT: 1,
+    CONF_WEBSOCKET_CLOSE_TRIES: 0,
+    CONF_WEBSOCKET_PING_INTERVAL: 1,
+    CONF_WEBSOCKET_PING_TIMEOUT: 1,
+}
 DEFAULT_NAME = "test"
