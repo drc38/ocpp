@@ -277,10 +277,14 @@ async def test_socket_timeout(hass, socket_enabled, timeout_on_wait_for):
     async with websockets.connect(
         "ws://127.0.0.1:9002/CP_2",
     ) as ws:
-        cp = ChargePoint("CP_2_timeout", ws)
-        cp.start()
-        await asyncio.sleep(3)
-        cp.stop()
+        try:
+            cp = ChargePoint("CP_2_timeout", ws)
+            cp.start()
+            await asyncio.sleep(3)
+        except asyncio.TimeoutError:
+            pass
+        finally:
+            cp.stop()
 
 
 class ChargePoint(cpclass):
