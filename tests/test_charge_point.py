@@ -275,7 +275,7 @@ async def test_socket_timeout(hass, socket_enabled, timeout_on_wait_for):
 
     # no subprotocol
     async with websockets.connect(
-        "ws://127.0.0.1:9000/CP_2",
+        "ws://127.0.0.1:9001/CP_2",
     ) as ws:
         cp = ChargePoint("CP_2_timeout", ws)
         cp.start()
