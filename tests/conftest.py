@@ -49,3 +49,13 @@ def error_get_data_fixture():
     #    side_effect=Exception,
     # ):
     yield
+
+
+@pytest.fixture(name="timeout_on_wait_for")
+def timeout_on_wait_for_fixture():
+    """Simulate timeout error when using wait_for."""
+    with patch(
+        "asyncio.wait_for",
+        side_effect=asyncio.TimeoutError,
+    ):
+        yield

@@ -261,6 +261,28 @@ async def test_cms_responses(hass, socket_enabled):
     await hass.async_block_till_done()
 
 
+async def test_socket_timeout(hass, socket_enabled, timeout_on_wait_for):
+    """Test central system response to a charger where connection timesout."""
+
+    # Create a mock entry so we don't have to go through config flow
+    config_entry = MockConfigEntry(
+        domain=OCPP_DOMAIN, data=MOCK_CONFIG_DATA, entry_id="test_cms"
+    )
+    assert await async_setup_entry(hass, config_entry)
+    await hass.async_block_till_done()
+
+    # cs = hass.data[OCPP_DOMAIN][config_entry.entry_id]
+
+    # no subprotocol
+    async with websockets.connect(
+        "ws://127.0.0.1:9000/CP_2",
+    ) as ws:
+        cp = ChargePoint("CP_2_timeout", ws)
+        cp.start()
+        await asyncio.sleep(3)
+        cp.stop()
+
+
 class ChargePoint(cpclass):
     """Representation of real client Charge Point."""
 
