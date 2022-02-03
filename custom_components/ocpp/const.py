@@ -80,6 +80,7 @@ DEFAULT_POWER_UNIT = UnitOfMeasure.w.value
 HA_ENERGY_UNIT = UnitOfMeasure.kwh.value
 HA_POWER_UNIT = UnitOfMeasure.kw.value
 
+
 # Where a HA unit does not exist use Ocpp unit
 UNITS_OCCP_TO_HA = {
     UnitOfMeasure.wh: ha.ENERGY_WATT_HOUR,

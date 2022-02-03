@@ -1069,6 +1069,7 @@ class ChargePoint(cp):
         )
         self.received_boot_notification = True
         _LOGGER.debug("Received boot notification for %s: %s", self.id, kwargs)
+        self.hass.async_create_task(self.notify_ha(f"Charger {self.id} booted"))
         # update metrics
         self._metrics[cdet.model.value].value = kwargs.get(
             om.charge_point_model.name, None
