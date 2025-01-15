@@ -2,6 +2,7 @@
 
 import logging
 
+from dataclasses import dataclass, field
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
@@ -84,6 +85,17 @@ CONFIG_SCHEMA = vol.Schema(
 )
 
 
+@dataclass
+class OcppData:
+    """Class for entry runtime data."""
+
+    central_sys: CentralSystem
+    chargers: list = field(default_factory=list)
+
+
+type OcppConfigEntry = ConfigEntry[OcppData]
+
+
 async def async_setup(hass: HomeAssistant, config: ConfigType):
     """Read configuration from yaml."""
 
@@ -95,7 +107,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType):
     return True
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
+async def async_setup_entry(hass: HomeAssistant, entry: OcppConfigEntry):
     """Set up this integration from config entry."""
     if hass.data.get(DOMAIN) is None:
         hass.data.setdefault(DOMAIN, {})
@@ -119,11 +131,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         config_entry_id=entry.entry_id,
         identifiers={(DOMAIN, cpid)},
         name=cpid,
-        model="Unknown",
         via_device=(DOMAIN, central_sys.id),
     )
 
-    hass.data[DOMAIN][entry.entry_id] = central_sys
+    entry.runtime_data.central_sys = central_sys
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
@@ -131,7 +142,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     return True
 
 
-async def async_migrate_entry(hass, config_entry: ConfigEntry):
+async def async_migrate_entry(hass, config_entry: OcppConfigEntry):
     """Migrate old entry."""
     _LOGGER.debug(
         "Migrating configuration from version %s.%s",
@@ -191,13 +202,13 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry):
     return True
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_unload_entry(hass: HomeAssistant, entry: OcppConfigEntry) -> bool:
     """Handle removal of an entry."""
     unloaded = False
     if DOMAIN in hass.data:
         if entry.entry_id in hass.data[DOMAIN]:
             # Close server
-            central_sys = hass.data[DOMAIN][entry.entry_id]
+            central_sys = entry.runtime_data.central_sys
             central_sys._server.close()
             await central_sys._server.wait_closed()
             # Unload services
@@ -207,13 +218,10 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             unloaded = await hass.config_entries.async_unload_platforms(
                 entry, PLATFORMS
             )
-            # Remove entry
-            if unloaded:
-                hass.data[DOMAIN].pop(entry.entry_id)
 
     return unloaded
 
 
-async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+async def async_reload_entry(hass: HomeAssistant, entry: OcppConfigEntry) -> None:
     """Reload config entry."""
     await hass.config_entries.async_reload(entry.entry_id)

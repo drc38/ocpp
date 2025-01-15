@@ -7,13 +7,13 @@ import ssl
 
 from functools import partial
 from homeassistant.helpers import device_registry
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_OK
 from homeassistant.core import HomeAssistant
 from websockets import Subprotocol, NegotiationError
 import websockets.server
 from websockets.asyncio.server import ServerConnection
 
+from . import OcppConfigEntry
 from .ocppv16 import ChargePoint as ChargePointv16
 from .ocppv201 import ChargePoint as ChargePointv201
 
@@ -37,7 +37,7 @@ logging.getLogger(DOMAIN).setLevel(logging.INFO)
 class CentralSystem:
     """Server for handling OCPP connections."""
 
-    def __init__(self, hass: HomeAssistant, entry: ConfigEntry):
+    def __init__(self, hass: HomeAssistant, entry: OcppConfigEntry):
         """Instantiate instance of a CentralSystem."""
         self.hass = hass
         self.entry = entry
@@ -50,7 +50,7 @@ class CentralSystem:
         self.connections = 0
 
     @staticmethod
-    async def create(hass: HomeAssistant, entry: ConfigEntry):
+    async def create(hass: HomeAssistant, entry: OcppConfigEntry):
         """Create instance and start listening for OCPP connections on given port."""
         self = CentralSystem(hass, entry)
 

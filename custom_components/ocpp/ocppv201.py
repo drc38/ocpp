@@ -7,7 +7,6 @@ import logging
 import ocpp.exceptions
 from ocpp.exceptions import OCPPError
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfTime
 from homeassistant.core import HomeAssistant, SupportsResponse, ServiceResponse
 from homeassistant.exceptions import ServiceValidationError, HomeAssistantError
@@ -37,6 +36,7 @@ from ocpp.v201.enums import (
     ChargingProfileStatusEnumType,
 )
 
+from . import OcppConfigEntry
 from .chargepoint import (
     OcppVersion,
     SetVariableResult,
@@ -88,7 +88,7 @@ class ChargePoint(cp):
         id: str,
         connection: ServerConnection,
         hass: HomeAssistant,
-        entry: ConfigEntry,
+        entry: OcppConfigEntry,
         central: CentralSystemSettings,
         charger: ChargerSystemSettings,
     ):

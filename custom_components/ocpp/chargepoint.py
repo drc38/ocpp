@@ -12,7 +12,6 @@ import string
 import time
 
 from homeassistant.components.persistent_notification import DOMAIN as PN_DOMAIN
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.const import STATE_OK, STATE_UNAVAILABLE, STATE_UNKNOWN
 from homeassistant.const import UnitOfTime
@@ -32,6 +31,7 @@ from ocpp.v201 import call_result as call_resultv201
 from ocpp.messages import CallError
 from ocpp.exceptions import NotImplementedError
 
+from . import OcppConfigEntry
 from .enums import (
     HAChargerDetails as cdet,
     HAChargerServices as csvcs,
@@ -183,7 +183,7 @@ class ChargePoint(cp):
         connection,
         version: OcppVersion,
         hass: HomeAssistant,
-        entry: ConfigEntry,
+        entry: OcppConfigEntry,
         central: CentralSystemSettings,
         charger: ChargerSystemSettings,
     ):

@@ -64,7 +64,7 @@ SWITCHES: Final = [
 
 async def async_setup_entry(hass, entry, async_add_devices):
     """Configure the sensor platform."""
-    central_system = hass.data[DOMAIN][entry.entry_id]
+    central_system = entry.runtime_data.central_sys
     cpid = list(entry.data[CONF_CPIDS][0].keys())[0]
 
     entities = []

@@ -6,7 +6,6 @@ import logging
 from homeassistant.const import STATE_UNAVAILABLE
 import time
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 import voluptuous as vol
 from websockets.asyncio.server import ServerConnection
@@ -36,6 +35,7 @@ from ocpp.v16.enums import (
     UnlockStatus,
 )
 
+from . import OcppConfigEntry
 from .chargepoint import (
     OcppVersion,
     MeasurandValue,
@@ -72,7 +72,7 @@ class ChargePoint(cp):
         id: str,
         connection: ServerConnection,
         hass: HomeAssistant,
-        entry: ConfigEntry,
+        entry: OcppConfigEntry,
         central: CentralSystemSettings,
         charger: ChargerSystemSettings,
     ):
