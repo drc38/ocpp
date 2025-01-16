@@ -72,7 +72,7 @@ async def create_configuration(
     assert await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
 
-    return hass.data[OCPP_DOMAIN][config_entry.entry_id]
+    return config_entry.runtime_data.central_sys
 
 
 create_configuration.__test__ = False

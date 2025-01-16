@@ -31,7 +31,6 @@ from ocpp.v201 import call_result as call_resultv201
 from ocpp.messages import CallError
 from ocpp.exceptions import NotImplementedError
 
-from . import OcppConfigEntry
 from .enums import (
     HAChargerDetails as cdet,
     HAChargerServices as csvcs,
@@ -183,7 +182,7 @@ class ChargePoint(cp):
         connection,
         version: OcppVersion,
         hass: HomeAssistant,
-        entry: OcppConfigEntry,
+        entry,
         central: CentralSystemSettings,
         charger: ChargerSystemSettings,
     ):

@@ -31,6 +31,7 @@ async def test_setup_unload_and_reload_entry(
         version=2,
         minor_version=0,
     )
+
     config_entry.add_to_hass(hass)
     await hass.async_block_till_done()
 
@@ -41,12 +42,12 @@ async def test_setup_unload_and_reload_entry(
     await hass.async_block_till_done()
     assert DOMAIN in hass.data
     assert config_entry.entry_id in hass.data[DOMAIN]
-    assert type(hass.data[DOMAIN][config_entry.entry_id]) is CentralSystem
+    assert type(config_entry.runtime_data.central_sys) is CentralSystem
 
     # Reload the entry and assert that the data from above is still there
     assert await hass.config_entries.async_reload(config_entry.entry_id)
     assert DOMAIN in hass.data and config_entry.entry_id in hass.data[DOMAIN]
-    assert type(hass.data[DOMAIN][config_entry.entry_id]) is CentralSystem
+    assert type(config_entry.runtime_data.central_sys) is CentralSystem
 
     # Unload the entry and verify that the data has been removed
     assert await hass.config_entries.async_remove(config_entry.entry_id)
@@ -76,7 +77,7 @@ async def test_migration_entry(
     await hass.async_block_till_done()
     assert DOMAIN in hass.data
     assert config_entry.entry_id in hass.data[DOMAIN]
-    assert type(hass.data[DOMAIN][config_entry.entry_id]) is CentralSystem
+    assert type(config_entry.runtime_data.central_sys) is CentralSystem
     # check migration has created new entry with correct keys
     assert config_entry.data.keys() == MOCK_CONFIG_DATA.keys()
     # check versions match

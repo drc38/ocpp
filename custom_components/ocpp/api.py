@@ -13,7 +13,6 @@ from websockets import Subprotocol, NegotiationError
 import websockets.server
 from websockets.asyncio.server import ServerConnection
 
-from . import OcppConfigEntry
 from .ocppv16 import ChargePoint as ChargePointv16
 from .ocppv201 import ChargePoint as ChargePointv201
 
@@ -37,7 +36,7 @@ logging.getLogger(DOMAIN).setLevel(logging.INFO)
 class CentralSystem:
     """Server for handling OCPP connections."""
 
-    def __init__(self, hass: HomeAssistant, entry: OcppConfigEntry):
+    def __init__(self, hass: HomeAssistant, entry):
         """Instantiate instance of a CentralSystem."""
         self.hass = hass
         self.entry = entry
@@ -50,7 +49,7 @@ class CentralSystem:
         self.connections = 0
 
     @staticmethod
-    async def create(hass: HomeAssistant, entry: OcppConfigEntry):
+    async def create(hass: HomeAssistant, entry):
         """Create instance and start listening for OCPP connections on given port."""
         self = CentralSystem(hass, entry)
 

@@ -36,7 +36,6 @@ from ocpp.v201.enums import (
     ChargingProfileStatusEnumType,
 )
 
-from . import OcppConfigEntry
 from .chargepoint import (
     OcppVersion,
     SetVariableResult,
@@ -88,7 +87,7 @@ class ChargePoint(cp):
         id: str,
         connection: ServerConnection,
         hass: HomeAssistant,
-        entry: OcppConfigEntry,
+        entry,
         central: CentralSystemSettings,
         charger: ChargerSystemSettings,
     ):

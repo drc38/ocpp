@@ -35,7 +35,6 @@ from ocpp.v16.enums import (
     UnlockStatus,
 )
 
-from . import OcppConfigEntry
 from .chargepoint import (
     OcppVersion,
     MeasurandValue,
@@ -72,7 +71,7 @@ class ChargePoint(cp):
         id: str,
         connection: ServerConnection,
         hass: HomeAssistant,
-        entry: OcppConfigEntry,
+        entry,
         central: CentralSystemSettings,
         charger: ChargerSystemSettings,
     ):
