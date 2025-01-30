@@ -70,9 +70,7 @@ async def async_setup_entry(hass, entry, async_add_devices):
                     CONF_MAX_CURRENT, DEFAULT_MAX_CURRENT
                 )
             cpx = ChargePointNumber(hass, central_system, cpid, ent)
-            # Only add if entity does not exist
-            if hass.states.get(cpx._attr_unique_id) is None:
-                entities.append(cpx)
+            entities.append(cpx)
 
     async_add_devices(entities, False)
 

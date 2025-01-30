@@ -54,9 +54,7 @@ async def async_setup_entry(hass, entry, async_add_devices):
 
         for ent in BUTTONS:
             cpx = ChargePointButton(central_system, cpid, ent)
-            # Only add if entity does not exist
-            if hass.states.get(cpx._attr_unique_id) is None:
-                entities.append(cpx)
+            entities.append(cpx)
 
     async_add_devices(entities, False)
 
