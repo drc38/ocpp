@@ -367,7 +367,7 @@ class CentralSystem:
         }
 
     def check_charger_available(func):
-        """Decorator to check if charger is available before executing service."""
+        """Check charger is available before executing service with Decorator."""
         async def wrapper(self, call, *args, **kwargs):
             cp_id = self.cpids.get(call.data["devid"], call.data["devid"])
             cp = self.charge_points[cp_id]
@@ -383,25 +383,25 @@ class CentralSystem:
 
     # Define custom service handles for charge point
     @check_charger_available
-    async def handle_clear_profile(self, call):
+    async def handle_clear_profile(self, call, cp):
         """Handle the clear profile service call."""
         await cp.clear_profile()
 
     @check_charger_available
-    async def handle_update_firmware(self, call):
+    async def handle_update_firmware(self, call, cp):
         """Handle the firmware update service call."""
         url = call.data.get("firmware_url")
         delay = int(call.data.get("delay_hours", 0))
         await cp.update_firmware(url, delay)
 
     @check_charger_available
-    async def handle_get_diagnostics(self, call):
+    async def handle_get_diagnostics(self, call, cp):
         """Handle the get get diagnostics service call."""
         url = call.data.get("upload_url")
         await cp.get_diagnostics(url)
 
     @check_charger_available
-    async def handle_data_transfer(self, call):
+    async def handle_data_transfer(self, call, cp):
         """Handle the data transfer service call."""
         vendor = call.data.get("vendor_id")
         message = call.data.get("message_id", "")
@@ -409,7 +409,7 @@ class CentralSystem:
         await cp.data_transfer(vendor, message, data)
 
     @check_charger_available
-    async def handle_set_charge_rate(self, call):
+    async def handle_set_charge_rate(self, call, cp):
         """Handle the data transfer service call."""
         amps = call.data.get("limit_amps", None)
         watts = call.data.get("limit_watts", None)
