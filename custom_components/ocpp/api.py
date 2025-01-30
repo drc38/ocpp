@@ -426,7 +426,7 @@ class CentralSystem:
             await cp.set_charge_rate(limit_amps=amps, conn_id=id)
 
     @check_charger_available
-    async def handle_configure(self, call) -> ServiceResponse:
+    async def handle_configure(self, call, cp) -> ServiceResponse:
         """Handle the configure service call."""
         key = call.data.get("ocpp_key")
         value = call.data.get("value")
@@ -434,7 +434,7 @@ class CentralSystem:
         return {"reboot_required": result == SetVariableResult.reboot_required}
 
     @check_charger_available
-    async def handle_get_configuration(self, call) -> ServiceResponse:
+    async def handle_get_configuration(self, call, cp) -> ServiceResponse:
         """Handle the get configuration service call."""
         key = call.data.get("ocpp_key")
         value = await cp.get_configuration(key)
