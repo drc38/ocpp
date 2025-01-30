@@ -478,6 +478,7 @@ async def test_cms_responses_actions_v16(
     entry.data[CONF_CPIDS][-1][cp_id][CONF_CPID] = "cpid2"
     # reload required to setup new charger in HA, normally happens with discovery flow
     assert await hass.config_entries.async_reload(entry.entry_id)
+    cs = hass.data[DOMAIN][entry.entry_id]
 
     # test ocpp messages sent from charger that don't support errata 3.9
     # i.e. "Energy.Meter.Start" starts from 0 for each session and "Energy.Active.Import.Register"
