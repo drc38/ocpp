@@ -72,13 +72,13 @@ async def async_setup_entry(hass, entry, async_add_devices):
 
         for ent in SENSORS:
             cpm = ChargePointMetric(
-                    hass,
-                    central_system,
-                    cpid,
-                    ent,
-                )
+                hass,
+                central_system,
+                cpid,
+                ent,
+            )
             # Only add if entity does not exist
-            if hass.states.get(cpm._attr_unique_id):
+            if hass.states.get(cpm._attr_unique_id) is None:
                 entities.append(cpm)
 
     async_add_devices(entities, False)
