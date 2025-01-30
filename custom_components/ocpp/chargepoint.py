@@ -53,7 +53,6 @@ from .const import (
     DOMAIN,
     HA_ENERGY_UNIT,
     HA_POWER_UNIT,
-    PLATFORMS,
     UNITS_OCCP_TO_HA,
 )
 

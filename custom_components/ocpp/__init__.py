@@ -126,7 +126,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             )
 
     hass.data[DOMAIN][entry.entry_id] = central_sys
-    
+
     if entry.data[CONF_CPIDS]:
         await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
