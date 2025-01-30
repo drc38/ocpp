@@ -41,11 +41,11 @@ class OcppSensorDescription(SensorEntityDescription):
 async def async_setup_entry(hass, entry, async_add_devices):
     """Configure the sensor platform."""
     central_system = hass.data[DOMAIN][entry.entry_id]
-    # setup last charger added to config
+    entities = []
+    # setup all chargers added to config
     for charger in entry.data[CONF_CPIDS]:
         cp_id_settings = list(charger.values())[0]
         cpid = cp_id_settings[CONF_CPID]
-        entities = []
         SENSORS = []
         for metric in list(
             set(

@@ -62,24 +62,6 @@ _LOGGER: logging.Logger = logging.getLogger(__package__)
 logging.getLogger(DOMAIN).setLevel(logging.INFO)
 
 
-async def async_setup_charger(hass, entry, cs_id, cpid, cp_id):
-    """Configure the charger device and its platforms."""
-
-    dr = device_registry.async_get(hass)
-
-    """ Create Central System Device """
-    dr.async_get_or_create(
-        config_entry_id=entry.entry_id,
-        identifiers={(DOMAIN, cp_id), (DOMAIN, cpid)},
-        name=cpid,
-        suggested_area="Garage",
-        via_device=(DOMAIN, cs_id),
-    )
-
-    # await hass.config_entries.async_reload(entry.entry_id)
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-
-
 class Metric:
     """Metric class."""
 
