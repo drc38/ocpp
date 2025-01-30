@@ -54,7 +54,10 @@ async def async_setup_entry(hass, entry, async_add_devices):
         entities = []
 
         for ent in BUTTONS:
-            entities.append(ChargePointButton(central_system, cpid, ent))
+            cpb = ChargePointButton(central_system, cpid, ent)
+            # Only add if entity does not exist
+            if hass.states.get(cpb._attr_unique_id):
+                entities.append(cpb)
 
     async_add_devices(entities, False)
 
