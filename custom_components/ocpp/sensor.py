@@ -53,6 +53,7 @@ async def async_setup_entry(hass, entry, async_add_devices):
                 cp_id_settings[CONF_MONITORED_VARIABLES].split(",")
                 + list(HAChargerSession)
             )
+        )
 
         CHARGER_ONLY = [
             HAChargerStatuses.status.value,
