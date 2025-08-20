@@ -137,7 +137,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
 async def async_migrate_entry(hass, config_entry: ConfigEntry):
     """Migrate old entry."""
-    _LOGGER.debug(
+    _LOGGER.info(
         "Migrating configuration from version %s.%s",
         config_entry.version,
         config_entry.minor_version,
@@ -180,8 +180,11 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry):
             csid_data.update({key: old_data.get(key, value)})
 
         new_data = csid_data
-        cp_id = hass.states.get(f"sensor.{cpid_data[CONF_CPID]}_id")
+        cp_id = hass.states.get(f"sensor.{cpid_data[CONF_CPID].lower()}_id")
         if cp_id is None:
+            _LOGGER.warning(
+                "Could not find charger id during migration, try a clean install"
+            )
             return False
         new_data.update({CONF_CPIDS: [{cp_id: cpid_data}]})
 
@@ -189,7 +192,7 @@ async def async_migrate_entry(hass, config_entry: ConfigEntry):
             config_entry, data=new_data, minor_version=0, version=2
         )
 
-    _LOGGER.debug(
+    _LOGGER.info(
         "Migration to configuration version %s.%s successful",
         config_entry.version,
         config_entry.minor_version,
