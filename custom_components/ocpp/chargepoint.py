@@ -118,25 +118,22 @@ class Metric:
 class _ConnectorAwareMetrics(MutableMapping):
     """Backwards compatible mapping for metrics.
 
-      - m["Power.Active.Import"]         -> Metric for connector 0 (flat access)
-      - m[(2, "Power.Active.Import")]    -> Metric for connector 2 (per connector)
-      - m[2]                             -> dict[str -> Metric] for connector 2
+    - m["Power.Active.Import"]         -> Metric for connector 0 (flat access)
+    - m[(2, "Power.Active.Import")]    -> Metric for connector 2 (per connector)
+    - m[2]                             -> dict[str -> Metric] for connector 2
 
-    Iteration, len, keys(), items() etc act like flat dict (connector 0).
+    Iteration, len, keys(), values(), items() operate on connector 0 (flat view).
     """
 
     def __init__(self):
         self._by_conn = defaultdict(lambda: defaultdict(lambda: Metric(None, None)))
 
-    # --- flat (default connector 0) & connector-indexerad access ---
     def __getitem__(self, key):
         if isinstance(key, tuple) and len(key) == 2 and isinstance(key[0], int):
             conn, meas = key
             return self._by_conn[conn][meas]
         if isinstance(key, int):
-            # Returnerar dict[str -> Metric] för connectorn
             return self._by_conn[key]
-        # Platt: returnera Metric i connector 0
         return self._by_conn[0][key]
 
     def __setitem__(self, key, value):
@@ -151,7 +148,6 @@ class _ConnectorAwareMetrics(MutableMapping):
                 raise TypeError("Connector mapping must be dict[str, Metric].")
             self._by_conn[key] = value
             return
-        # Platt
         if not isinstance(value, Metric):
             raise TypeError("Metric assignment must be a Metric instance.")
         self._by_conn[0][key] = value
@@ -167,14 +163,11 @@ class _ConnectorAwareMetrics(MutableMapping):
         del self._by_conn[0][key]
 
     def __iter__(self):
-        # Iterera som ett platt dict (connector 0)
         return iter(self._by_conn[0])
 
     def __len__(self):
-        # Storlek som platt dict (connector 0)
         return len(self._by_conn[0])
 
-    # Hjälpmetoder i dict-stil
     def get(self, key, default=None):
         try:
             return self[key]
@@ -805,7 +798,7 @@ class ChargePoint(cp):
                         else:
                             # Derive: EAIR_kWh - meter_start_kWh
                             ms_val = self._metrics[
-                                (connector_id, csess.meter_start)
+                                (connector_id, csess.meter_start.value)
                             ].value
                             if ms_val is not None:
                                 self._metrics[
